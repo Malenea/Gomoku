@@ -20,6 +20,12 @@
 # define	SPACE_KEY (32)
 # define	ARROW_UP_KEY (183)
 # define	ARROW_DOWN_KEY (184)
+# define	ARROW_RIGHT_KEY (185)
+# define	ARROW_LEFT_KEY (186)
+
+# define	EMPTY_SPOT ('-')
+# define	PLAYER_SPOT ('o')
+# define	IA_SPOT ('x')
 
 typedef struct	s_opt
 {

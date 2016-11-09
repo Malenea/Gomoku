@@ -302,22 +302,45 @@ int		display_menu(t_game *curr, WINDOW *win)
   return (0);
 }
 
-void		player_cmds(t_game *curr, int ch_sum)
+void		player_cmds(t_game *curr, WINDOW *win)
 {
-  if (ch_sum == SPACE_KEY)
+  char		ch[4];
+  int		ch_sum;
+
+  reset_key(ch);
+  while (read(0, ch, 4))
     {
-      if (curr->board[curr->cursy][curr->cursx] == 'o')
-	curr->board[curr->cursy][curr->cursx] = '-';
+      ch_sum = ch[0] + ch[1] + ch[2] + ch[3];
+      if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-')
+	{
+	  (curr->board[curr->cursy][curr->cursx] = curr->pstate == true ? 'o' : 'x');
+	  wclear(win);
+	  display_board(curr, win);
+	  wrefresh(win);
+	  curr->pstate = (curr->pstate == true ? false : true);
+	  return ;
+	}
       else
-	(curr->board[curr->cursy][curr->cursx] = 'o');
+	{
+	  if (ch_sum == ARROW_UP_KEY)
+	    curr->cursy = (curr->cursy == 0 ? curr->h - 1 : curr->cursy - 1);
+	  else if (ch_sum == ARROW_DOWN_KEY)
+	    curr->cursy = (curr->cursy == curr->h - 1 ? 0 : curr->cursy + 1);
+	  else if (ch_sum == ARROW_RIGHT_KEY)
+	    curr->cursx = (curr->cursx == curr->l - 1 ? 0 : curr->cursx + 1);
+	  else if (ch_sum == ARROW_LEFT_KEY)
+	    curr->cursx = (curr->cursx == 0 ? curr->l - 1 : curr->cursx - 1);
+	  wclear(win);
+	  display_board(curr, win);
+	  wrefresh(win);
+	}
+      reset_key(ch);
     }
 }
 
 int		manage_display(t_game *curr)
 {
   WINDOW	*win;
-  char		ch[4];
-  int		ch_sum;
   int		ret;
 
   win = newwin(MENU_H, MENU_L, 1, 1);
@@ -331,20 +354,12 @@ int		manage_display(t_game *curr)
       wgetch(win);
       return (0);
     }
-  wresize(win, curr->h, curr->l);
+  wresize(win, curr->h * 2, curr->l);
   display_board(curr, win);
-  reset_key(ch);
   wrefresh(win);
-  while (read(0, ch, 4))
+  while (1)
     {
-      ch_sum = ch[0] + ch[1] + ch[2] + ch[3];
-      wclear(win);
-
-      player_cmds(curr, ch_sum);
-
-      display_board(curr, win);
-      wrefresh(win);
-      reset_key(ch);
+      player_cmds(curr, win);
     }
   return (0);
 }
