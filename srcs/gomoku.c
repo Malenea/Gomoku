@@ -41,7 +41,7 @@ void		init_game(t_game *curr)
   curr->l = 0;
   curr->cursy = 0;
   curr->cursx = 0;
-  curr->options.vs_ia = false;
+  curr->options.vs_ia = true;
 }
 
 int		fill_board(t_game *curr)
@@ -339,11 +339,14 @@ void		player_cmds(t_game *curr, WINDOW *win)
 
 void		ia_cmds(t_game *curr, WINDOW *win)
 {
-  (void)curr;
   wclear(win);
-  wprintw(win, "IA is playing...");
+  wprintw(win, "IA is playing.");
   wrefresh(win);
-  sleep(1);
+  sleep(2);
+  wclear(win);
+  display_board(curr, win);
+  wrefresh(win);
+  curr->pstate = true;
 }
 
 int		manage_game(t_game *curr)
