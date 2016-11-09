@@ -1,1 +1,1 @@
-# Gomoku
+# PreProject
