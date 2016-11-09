@@ -13,9 +13,10 @@
 # define	DEF_READ (117)
 # define	TABS ("\t\t\t\t\t\t\t")
 
+# define	RESUME (10)
 # define	NEW_GAME (0)
 # define	OPTIONS (1)
-# define	OPTIONS_NB (1)
+# define	OPTIONS_NB (2)
 # define	END_GAME (42)
 
 # define	SPACE_KEY (32)
@@ -23,6 +24,7 @@
 # define	ARROW_DOWN_KEY (184)
 # define	ARROW_RIGHT_KEY (185)
 # define	ARROW_LEFT_KEY (186)
+# define	ESC_KEY (27)
 
 # define	EMPTY_SPOT ('-')
 # define	PLAYER_SPOT ('o')
@@ -39,16 +41,22 @@ typedef struct	s_gopt
   bool		vs_ia;
 }		t_gopt;
 
+typedef struct	s_menu
+{
+  unsigned int	state;
+  bool		is_title;
+  char		**title;
+}		t_menu;
+
 typedef struct	s_player
 {
+  bool		first;
   bool		state;
 }		t_player;
 
 typedef struct	s_game
 {
-  bool		is_title;
-  char		**title;
-  unsigned int	mstate;
+  unsigned int	state;
   unsigned int	h;
   unsigned int	l;
   unsigned int	cursy;
@@ -56,6 +64,7 @@ typedef struct	s_game
   char		**board;
   t_player	player;
   t_gopt	options;
+  t_menu	menu;
 }		t_game;
 
 #endif		/* _GOMOKU_H_ */

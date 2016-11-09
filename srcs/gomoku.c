@@ -16,14 +16,14 @@ void		end_board(t_game *curr)
   int		posh;
   int		pos = 0;
 
-  if (curr->is_title)
+  if (curr->menu.is_title)
     {
-      while (curr->title[pos])
+      while (curr->menu.title[pos])
 	{
-	  free(curr->title[pos]);
+	  free(curr->menu.title[pos]);
 	  pos += 1;
 	}
-      free(curr->title);
+      free(curr->menu.title);
     }
   for (posh = 0; curr->board[posh]; posh++)
     if (curr->board[posh])
@@ -36,7 +36,9 @@ void		end_board(t_game *curr)
 
 void		init_game(t_game *curr)
 {
+  curr->player.first = true;
   curr->player.state = true;
+  curr->state = 0;
   curr->h = 0;
   curr->l = 0;
   curr->cursy = 0;
@@ -44,12 +46,28 @@ void		init_game(t_game *curr)
   curr->options.vs_ia = false;
 }
 
-int		fill_board(t_game *curr)
+void		reset_board(t_game *curr)
 {
-  int		posh;
+  int		posh = 0;
   int		posl;
 
-  posh = 0;
+  while (curr->board[posh])
+    {
+      posl = 0;
+      while (curr->board[posh][posl])
+	{
+	  curr->board[posh][posl] = '-';
+	  posl += 1;
+	}
+      posh += 1;
+    }
+}
+
+int		fill_board(t_game *curr)
+{
+  int		posh = 0;
+  int		posl;
+
   if ((curr->board = malloc(sizeof(char *) * (curr->h + 1))) == NULL)
     return (-ENOMEM);
   while (posh < curr->h)
@@ -173,29 +191,28 @@ int		get_title(t_game *curr)
   char		*title_path;
   int		fd;
   char		buffer[DEF_READ];
-  char		**title;
   unsigned int	h = 0;
 
-  curr->title = malloc(sizeof(char *) * TITLE_H);
-  curr->title[TITLE_H] = NULL;
+  curr->menu.title = malloc(sizeof(char *) * TITLE_H);
+  curr->menu.title[TITLE_H] = NULL;
   title_path = malloc(sizeof(char) * (strlen(path) + strlen(TITLE_PATH)));
   strcpy(title_path, path);
   strcat(title_path, TITLE_PATH);
   if ((fd = open(title_path, O_RDONLY)) < 0)
     {
-      curr->is_title = false;
+      curr->menu.is_title = false;
       return (-EBADF);
     }
   while (read(fd, buffer, TITLE_L))
     {
       buffer[TITLE_L] = 0;
-      curr->title[h] = strdup(buffer);
+      curr->menu.title[h] = strdup(buffer);
       h += 1;
     }
   close(fd);
   if (title_path)
     free(title_path);
-  curr->is_title = true;
+  curr->menu.is_title = true;
   return (0);
 }
 
@@ -203,11 +220,11 @@ void		display_title(t_game *curr, WINDOW *win)
 {
   int		pos = 0;
 
-  if (curr->is_title == true)
+  if (curr->menu.is_title == true)
     {
-      while (curr->title[pos])
+      while (curr->menu.title[pos])
 	{
-	  wprintw(win, "%s", curr->title[pos]);
+	  wprintw(win, "%s", curr->menu.title[pos]);
 	  pos += 1;
 	}
     }
@@ -234,6 +251,24 @@ void		print_options(t_game *curr, WINDOW *win)
       wprintw(win, "%s\n", curr->options.vs_ia == true ? "ON" : "OFF");
       wattroff(win, COLOR_PAIR(curr->options.vs_ia == true ? 1 : 2));
     }
+  if (curr->options.state == 1)
+    {
+      wprintw(win, "%s", TABS);
+      wattron(win, COLOR_PAIR(1));
+      wprintw(win, "Player starting:");
+      wattroff(win, COLOR_PAIR(1));
+      wprintw(win, "\t");
+      wattron(win, COLOR_PAIR(curr->player.first == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->player.first == true ? "Player 1" : "Player 2/IA");
+      wattroff(win, COLOR_PAIR(curr->player.first == true ? 1 : 2));
+    }
+  else
+    {
+      wprintw(win, "%sPlayer starting:\t", TABS);
+      wattron(win, COLOR_PAIR(curr->player.first == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->player.first == true ? "Player 1" : "Player 2/IA");
+      wattroff(win, COLOR_PAIR(curr->player.first == true ? 1 : 2));
+    }
   if (curr->options.state == OPTIONS_NB)
     {
       wprintw(win, "%s", TABS);
@@ -247,7 +282,16 @@ void		print_options(t_game *curr, WINDOW *win)
 
 void		print_menu(t_game *curr, WINDOW *win)
 {
-  if (curr->mstate == 0)
+  if (curr->state == 1 && curr->menu.state == 0)
+    {
+      wprintw(win, "%s", TABS);
+      wattron(win, COLOR_PAIR(1));
+      wprintw(win, "Resume\n");
+      wattroff(win, COLOR_PAIR(1));
+    }
+  else if (curr->state == 1)
+    wprintw(win, "%sResume\n", TABS);
+  if (curr->menu.state == (curr->state == 1 ? 1 : 0))
     {
       wprintw(win, "%s", TABS);
       wattron(win, COLOR_PAIR(1));
@@ -256,7 +300,7 @@ void		print_menu(t_game *curr, WINDOW *win)
     }
   else
     wprintw(win, "%sNew Game\n", TABS);
-  if (curr->mstate == 1)
+  if (curr->menu.state == (curr->state == 1 ? 2 : 1))
     {
       wprintw(win, "%s", TABS);
       wattron(win, COLOR_PAIR(1));
@@ -265,7 +309,7 @@ void		print_menu(t_game *curr, WINDOW *win)
     }
   else
     wprintw(win, "%sOptions\n", TABS);
-  if (curr->mstate == 2)
+  if (curr->menu.state == (curr->state == 1 ? 3 : 2))
     {
       wprintw(win, "%s", TABS);
       wattron(win, COLOR_PAIR(1));
@@ -300,6 +344,8 @@ void		display_options(t_game *curr, WINDOW *win)
 	{
 	  if (curr->options.state == 0)
 	    curr->options.vs_ia = (curr->options.vs_ia == true ? false : true);
+	  else if (curr->options.state == 1)
+	    curr->player.first = (curr->player.first == true ? false : true);
 	  else
 	    {
 	      wclear(win);
@@ -324,6 +370,7 @@ int		get_menu(t_game *curr, WINDOW *win)
   char		ch[4];
   int		ch_sum;
 
+  wclear(win);
   display_title(curr, win);
   print_menu(curr, win);
   wrefresh(win);
@@ -335,12 +382,15 @@ int		get_menu(t_game *curr, WINDOW *win)
 	{
 	  wclear(win);
 	  wrefresh(win);
-	  return ((curr->mstate == 0 ? NEW_GAME : (curr->mstate == 1 ? OPTIONS : END_GAME)));
+	  if (curr->state == 0)
+	    return ((curr->menu.state == 0 ? NEW_GAME : (curr->menu.state == 1 ? OPTIONS : END_GAME)));
+	  else if (curr->state == 1)
+	    return ((curr->menu.state == 0 ? RESUME : (curr->menu.state == 1 ? NEW_GAME : (curr->menu.state == 2 ? OPTIONS : END_GAME))));
 	}
       else if (ch_sum == ARROW_UP_KEY)
-	curr->mstate = (curr->mstate == 0 ? 2 : curr->mstate - 1);
+	curr->menu.state = (curr->menu.state == 0 ? (curr->state == 1 ? 3 : 2) : curr->menu.state - 1);
       else if (ch_sum == ARROW_DOWN_KEY)
-	curr->mstate = (curr->mstate == 2 ? 0 : curr->mstate + 1);
+	curr->menu.state = (curr->menu.state == (curr->state == 1 ? 3 : 2) ? 0 : curr->menu.state + 1);
       wclear(win);
       display_title(curr, win);
       print_menu(curr, win);
@@ -353,11 +403,17 @@ int		display_menu(t_game *curr, WINDOW *win)
 {
   int		ret;
 
-  curr->mstate = 0;
+  curr->menu.state = 0;
   curr->options.state = 0;
+  wresize(win, MENU_H, MENU_L);
   ret = get_menu(curr, win);
   if (ret == NEW_GAME)
-    return (NEW_GAME);
+    {
+      curr->state = 1;
+      return (NEW_GAME);
+    }
+  else if (ret == RESUME)
+    return (RESUME);
   else if (ret == OPTIONS)
     {
       display_options(curr, win);
@@ -368,10 +424,11 @@ int		display_menu(t_game *curr, WINDOW *win)
   return (0);
 }
 
-void		player_cmds(t_game *curr, WINDOW *win)
+int		player_cmds(t_game *curr, WINDOW *win)
 {
   char		ch[4];
   int		ch_sum;
+  int		ret;
 
   reset_key(ch);
   while (read(0, ch, 4))
@@ -391,7 +448,7 @@ void		player_cmds(t_game *curr, WINDOW *win)
 	  wprintw(win, "Player %d's turn.", (curr->player.state == true ? 1 : 2));
 	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wrefresh(win);
-	  return ;
+	  return (0);
 	}
       else
 	{
@@ -403,6 +460,20 @@ void		player_cmds(t_game *curr, WINDOW *win)
 	    curr->cursx = (curr->cursx == curr->l - 1 ? 0 : curr->cursx + 1);
 	  else if (ch_sum == ARROW_LEFT_KEY)
 	    curr->cursx = (curr->cursx == 0 ? curr->l - 1 : curr->cursx - 1);
+	  else if (ch_sum == ESC_KEY)
+	    {
+	      ret = display_menu(curr, win);
+	      wresize(win, curr->h * 2, curr->l);
+	      if (ret == NEW_GAME)
+		{
+		  reset_board(curr);
+		  curr->player.state = (curr->player.first == true ? true : false);
+		  curr->cursy = 0;
+		  curr->cursx = 0;
+		}
+	      else if (ret == END_GAME)
+		return (END_GAME);
+	    }
 	  wclear(win);
 	  display_board(curr, win);
 	  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
@@ -412,6 +483,7 @@ void		player_cmds(t_game *curr, WINDOW *win)
 	}
       reset_key(ch);
     }
+  return (0);
 }
 
 void		ia_cmds(t_game *curr, WINDOW *win)
@@ -436,6 +508,7 @@ int		manage_game(t_game *curr)
   ret = display_menu(curr, win);
   if (ret == END_GAME)
     {
+      wresize(win, MENU_H, MENU_L);
       wclear(win);
       wprintw(win, "%sThank you for playing Gomoku.\n%sSee you soon.", TABS, TABS);
       wrefresh(win);
@@ -451,11 +524,25 @@ int		manage_game(t_game *curr)
   while (1)
     {
       if (curr->options.vs_ia == false || (curr->options.vs_ia == true && curr->player.state == true))
-	player_cmds(curr, win);
+	{
+	  ret = player_cmds(curr, win);
+	  if (ret == END_GAME)
+	    {
+	      wresize(win, MENU_H, MENU_L);
+	      wclear(win);
+	      wprintw(win, "%sThank you for playing Gomoku.\n%sSee you soon.", TABS, TABS);
+	      wrefresh(win);
+	      wgetch(win);
+	      return (0);
+	    }
+	}
       else if (curr->options.vs_ia == true && curr->player.state == false)
 	ia_cmds(curr, win);
       else
-	return (MY_ERROR(-EINVAL, "Something went wrong during the game, exiting now."));
+	{
+	  wgetch(win);
+	  return (MY_ERROR(-EINVAL, "Something went wrong during the game, exiting now."));
+	}
     }
   return (0);
 }
@@ -480,10 +567,8 @@ int		main(int ac, char **av)
       init_pair(4, COLOR_RED, COLOR_BLACK);
       if ((ret = fill_board(&curr)) < 0)
 	return (MY_ERROR(ret, "Board malloc failed"));
-      //
       manage_game(&curr);
       end_board(&curr);
-      //
     }
   return (0);
 }
