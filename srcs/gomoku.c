@@ -41,6 +41,7 @@ void		init_game(t_game *curr)
   curr->l = 0;
   curr->cursy = 0;
   curr->cursx = 0;
+  curr->options.vs_ia = false;
 }
 
 int		fill_board(t_game *curr)
@@ -102,7 +103,6 @@ int		get_opt(int ac, char **av, t_game *curr, t_opt *opt)
         opt->is_verbose = true;
         break;
     }
-
   if (curr->h == 0)
     {
       if (opt->is_verbose)
@@ -294,11 +294,6 @@ int		display_menu(t_game *curr, WINDOW *win)
     return (OPTIONS);
   else if (ret == END_GAME)
     return (END_GAME);
-
-  wgetch(win);
-
-  wclear(win);
-  wrefresh(win);
   return (0);
 }
 
@@ -313,7 +308,11 @@ void		player_cmds(t_game *curr, WINDOW *win)
       ch_sum = ch[0] + ch[1] + ch[2] + ch[3];
       if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-')
 	{
-	  (curr->board[curr->cursy][curr->cursx] = curr->pstate == true ? 'o' : 'x');
+	  if (curr->options.vs_ia == false)
+	    (curr->board[curr->cursy][curr->cursx] = (curr->pstate == true ? 'o' : 'x'));
+	  else
+	    curr->board[curr->cursy][curr->cursx] = 'o';
+	  //CHECK_ARBITRARY
 	  wclear(win);
 	  display_board(curr, win);
 	  wrefresh(win);
@@ -338,7 +337,16 @@ void		player_cmds(t_game *curr, WINDOW *win)
     }
 }
 
-int		manage_display(t_game *curr)
+void		ia_cmds(t_game *curr, WINDOW *win)
+{
+  (void)curr;
+  wclear(win);
+  wprintw(win, "IA is playing...");
+  wrefresh(win);
+  sleep(1);
+}
+
+int		manage_game(t_game *curr)
 {
   WINDOW	*win;
   int		ret;
@@ -359,7 +367,12 @@ int		manage_display(t_game *curr)
   wrefresh(win);
   while (1)
     {
-      player_cmds(curr, win);
+      if (curr->options.vs_ia == false || (curr->options.vs_ia == true && curr->pstate == true))
+	player_cmds(curr, win);
+      else if (curr->options.vs_ia == true && curr->pstate == false)
+	ia_cmds(curr, win);
+      else
+	return (MY_ERROR(-EINVAL, "Something went wrong during the game, exiting now."));
     }
   return (0);
 }
@@ -382,7 +395,7 @@ int		main(int ac, char **av)
       if ((ret = fill_board(&curr)) < 0)
 	return (MY_ERROR(ret, "Board malloc failed"));
       //
-      manage_display(&curr);
+      manage_game(&curr);
       end_board(&curr);
       //
     }

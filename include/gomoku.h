@@ -32,6 +32,11 @@ typedef struct	s_opt
   bool		is_verbose;
 }		t_opt;
 
+typedef struct	s_gopt
+{
+  bool		vs_ia;
+}		t_gopt;
+
 typedef struct	s_game
 {
   bool		is_title;
@@ -43,6 +48,7 @@ typedef struct	s_game
   unsigned int	cursy;
   unsigned int	cursx;
   char		**board;
+  t_gopt	options;
 }		t_game;
 
 #endif		/* _GOMOKU_H_ */
