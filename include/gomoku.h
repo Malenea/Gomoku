@@ -3,7 +3,7 @@
 
 # include	"trace.h"
 
-# define	DEFAULT_VALUE (15)
+# define	DEFAULT_VALUE (19)
 # define	MENU_H (150)
 # define	MENU_L (150)
 # define	TITLE_H (18)
@@ -15,6 +15,7 @@
 
 # define	NEW_GAME (0)
 # define	OPTIONS (1)
+# define	OPTIONS_NB (1)
 # define	END_GAME (42)
 
 # define	SPACE_KEY (32)
@@ -34,20 +35,26 @@ typedef struct	s_opt
 
 typedef struct	s_gopt
 {
+  unsigned int	state;
   bool		vs_ia;
 }		t_gopt;
+
+typedef struct	s_player
+{
+  bool		state;
+}		t_player;
 
 typedef struct	s_game
 {
   bool		is_title;
   char		**title;
   unsigned int	mstate;
-  bool		pstate;
   unsigned int	h;
   unsigned int	l;
   unsigned int	cursy;
   unsigned int	cursx;
   char		**board;
+  t_player	player;
   t_gopt	options;
 }		t_game;
 

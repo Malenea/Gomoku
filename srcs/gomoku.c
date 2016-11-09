@@ -36,12 +36,12 @@ void		end_board(t_game *curr)
 
 void		init_game(t_game *curr)
 {
-  curr->pstate = true;
+  curr->player.state = true;
   curr->h = 0;
   curr->l = 0;
   curr->cursy = 0;
   curr->cursx = 0;
-  curr->options.vs_ia = true;
+  curr->options.vs_ia = false;
 }
 
 int		fill_board(t_game *curr)
@@ -62,6 +62,7 @@ int		fill_board(t_game *curr)
 	  curr->board[posh][posl] = '-';
 	  posl += 1;
 	}
+      curr->board[posh][posl] = 0;
       posh += 1;
     }
   curr->board[posh] = NULL;
@@ -213,6 +214,37 @@ void		display_title(t_game *curr, WINDOW *win)
   wprintw(win, "\n\n");
 }
 
+void		print_options(t_game *curr, WINDOW *win)
+{
+  if (curr->options.state == 0)
+    {
+      wprintw(win, "%s", TABS);
+      wattron(win, COLOR_PAIR(1));
+      wprintw(win, "Playing against IA:");
+      wattroff(win, COLOR_PAIR(1));
+      wprintw(win, "\t");
+      wattron(win, COLOR_PAIR(curr->options.vs_ia == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->options.vs_ia == true ? "ON" : "OFF");
+      wattroff(win, COLOR_PAIR(curr->options.vs_ia == true ? 1 : 2));
+    }
+  else
+    {
+      wprintw(win, "%sPlaying against IA:\t", TABS);
+      wattron(win, COLOR_PAIR(curr->options.vs_ia == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->options.vs_ia == true ? "ON" : "OFF");
+      wattroff(win, COLOR_PAIR(curr->options.vs_ia == true ? 1 : 2));
+    }
+  if (curr->options.state == OPTIONS_NB)
+    {
+      wprintw(win, "%s", TABS);
+      wattron(win, COLOR_PAIR(1));
+      wprintw(win, "Exit\n");
+      wattroff(win, COLOR_PAIR(1));
+    }
+  else
+    wprintw(win, "%sExit\n", TABS);
+}
+
 void		print_menu(t_game *curr, WINDOW *win)
 {
   if (curr->mstate == 0)
@@ -252,6 +284,41 @@ void		reset_key(char *key)
   key[3] = 0;
 }
 
+void		display_options(t_game *curr, WINDOW *win)
+{
+  char		ch[4];
+  int		ch_sum;
+
+  display_title(curr, win);
+  print_options(curr, win);
+  wrefresh(win);
+  reset_key(ch);
+  while (read(0, ch, 4))
+    {
+      ch_sum = ch[0] + ch[1] + ch[2] + ch[3];
+      if (ch_sum == SPACE_KEY)
+	{
+	  if (curr->options.state == 0)
+	    curr->options.vs_ia = (curr->options.vs_ia == true ? false : true);
+	  else
+	    {
+	      wclear(win);
+	      wrefresh(win);
+	      return ;
+	    }
+	}
+      else if (ch_sum == ARROW_UP_KEY)
+	curr->options.state = (curr->options.state == 0 ? OPTIONS_NB : curr->options.state - 1);
+      else if (ch_sum == ARROW_DOWN_KEY)
+	curr->options.state = (curr->options.state == OPTIONS_NB ? 0 : curr->options.state + 1);
+      wclear(win);
+      display_title(curr, win);
+      print_options(curr, win);
+      wrefresh(win);
+      reset_key(ch);
+    }
+}
+
 int		get_menu(t_game *curr, WINDOW *win)
 {
   char		ch[4];
@@ -287,11 +354,15 @@ int		display_menu(t_game *curr, WINDOW *win)
   int		ret;
 
   curr->mstate = 0;
+  curr->options.state = 0;
   ret = get_menu(curr, win);
   if (ret == NEW_GAME)
     return (NEW_GAME);
   else if (ret == OPTIONS)
-    return (OPTIONS);
+    {
+      display_options(curr, win);
+      return (display_menu(curr, win));
+    }
   else if (ret == END_GAME)
     return (END_GAME);
   return (0);
@@ -309,14 +380,17 @@ void		player_cmds(t_game *curr, WINDOW *win)
       if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-')
 	{
 	  if (curr->options.vs_ia == false)
-	    (curr->board[curr->cursy][curr->cursx] = (curr->pstate == true ? 'o' : 'x'));
+	    (curr->board[curr->cursy][curr->cursx] = (curr->player.state == true ? 'o' : 'x'));
 	  else
 	    curr->board[curr->cursy][curr->cursx] = 'o';
 	  //CHECK_ARBITRARY
+	  curr->player.state = (curr->player.state == true ? false : true);
 	  wclear(win);
 	  display_board(curr, win);
+	  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
+	  wprintw(win, "Player %d's turn.", (curr->player.state == true ? 1 : 2));
+	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wrefresh(win);
-	  curr->pstate = (curr->pstate == true ? false : true);
 	  return ;
 	}
       else
@@ -331,6 +405,9 @@ void		player_cmds(t_game *curr, WINDOW *win)
 	    curr->cursx = (curr->cursx == 0 ? curr->l - 1 : curr->cursx - 1);
 	  wclear(win);
 	  display_board(curr, win);
+	  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
+	  wprintw(win, "Player %d's turn.", (curr->player.state == true ? 1 : 2));
+	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wrefresh(win);
 	}
       reset_key(ch);
@@ -346,7 +423,7 @@ void		ia_cmds(t_game *curr, WINDOW *win)
   wclear(win);
   display_board(curr, win);
   wrefresh(win);
-  curr->pstate = true;
+  curr->player.state = true;
 }
 
 int		manage_game(t_game *curr)
@@ -367,12 +444,15 @@ int		manage_game(t_game *curr)
     }
   wresize(win, curr->h * 2, curr->l);
   display_board(curr, win);
+  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
+  wprintw(win, "Player %d's turn.", (curr->player.state == true ? 1 : 2));
+  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
   wrefresh(win);
   while (1)
     {
-      if (curr->options.vs_ia == false || (curr->options.vs_ia == true && curr->pstate == true))
+      if (curr->options.vs_ia == false || (curr->options.vs_ia == true && curr->player.state == true))
 	player_cmds(curr, win);
-      else if (curr->options.vs_ia == true && curr->pstate == false)
+      else if (curr->options.vs_ia == true && curr->player.state == false)
 	ia_cmds(curr, win);
       else
 	return (MY_ERROR(-EINVAL, "Something went wrong during the game, exiting now."));
@@ -395,6 +475,9 @@ int		main(int ac, char **av)
       curs_set(0);
       start_color();
       init_pair(1, COLOR_WHITE, COLOR_GREEN);
+      init_pair(2, COLOR_WHITE, COLOR_RED);
+      init_pair(3, COLOR_BLUE, COLOR_BLACK);
+      init_pair(4, COLOR_RED, COLOR_BLACK);
       if ((ret = fill_board(&curr)) < 0)
 	return (MY_ERROR(ret, "Board malloc failed"));
       //
