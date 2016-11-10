@@ -34,8 +34,15 @@ void		end_board(t_game *curr)
   endwin();
 }
 
+void		reset_player_tokens(t_game *curr)
+{
+  curr->player.player1_tokens = 60;
+  curr->player.player2_tokens = 60;
+}
+
 void		init_game(t_game *curr)
 {
+  reset_player_tokens(curr);
   curr->player.first = true;
   curr->player.state = true;
   curr->state = 0;
@@ -160,12 +167,12 @@ void		display_board(t_game *curr, WINDOW *win)
   unsigned int	posl;
 
   posh = 0;
-  while (posh < curr->h)
+  while (curr->board[posh])
     {
       if (posh == curr->cursy)
 	{
 	  posl = 0;
-	  while (posl < curr->l)
+	  while (curr->board[posh][posl])
 	    {
 	      if (posl == curr->cursx)
 		{
@@ -424,6 +431,27 @@ int		display_menu(t_game *curr, WINDOW *win)
   return (0);
 }
 
+int		check_tokens(t_game *curr)
+{
+  if (curr->player.player1_tokens == 0 || curr->player.player2_tokens == 0)
+    return (DRAW_GAME);
+  return (0);
+}
+
+void		game_results(WINDOW *win, int is)
+{
+  wresize(win, MENU_H, MENU_L);
+  wclear(win);
+  if (is == 0)
+    wprintw(win, "%sNone of the players won the game.\n%sIt's a draw.", TABS, TABS);
+  else if (is == 1)
+    wprintw(win, "%sPlayer 1 won the game.\n%sAll hail Player 1.", TABS, TABS);
+  else
+    wprintw(win, "%sPlayer 2 won the game.\n%sAll hail Player 2.", TABS, TABS);
+  wrefresh(win);
+  wgetch(win);
+}
+
 int		player_cmds(t_game *curr, WINDOW *win)
 {
   char		ch[4];
@@ -437,15 +465,41 @@ int		player_cmds(t_game *curr, WINDOW *win)
       if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-')
 	{
 	  if (curr->options.vs_ia == false)
-	    (curr->board[curr->cursy][curr->cursx] = (curr->player.state == true ? 'o' : 'x'));
+	    {
+	      (curr->board[curr->cursy][curr->cursx] = (curr->player.state == true ? 'o' : 'x'));
+	      curr->player.player1_tokens = (curr->player.state == true ? curr->player.player1_tokens - 1 : curr->player.player1_tokens);
+	      curr->player.player2_tokens = (curr->player.state == false ? curr->player.player2_tokens - 1 : curr->player.player2_tokens);
+	    }
 	  else
-	    curr->board[curr->cursy][curr->cursx] = 'o';
+	    {
+	      curr->board[curr->cursy][curr->cursx] = 'o';
+	      curr->player.player1_tokens -= 1;
+	    }
+	  ret = check_tokens(curr);
 	  //CHECK_ARBITRARY
-	  curr->player.state = (curr->player.state == true ? false : true);
+	  if (ret == DRAW_GAME)
+	    {
+	      game_results(win, 0);
+	      curr->state = 0;
+	      ret = display_menu(curr, win);
+	      if (ret == NEW_GAME)
+		{
+		  reset_player_tokens(curr);
+		  reset_board(curr);
+		  curr->player.state = (curr->player.first == true ? true : false);
+		  curr->cursy = 0;
+		  curr->cursx = 0;
+		}
+	      else if (ret == END_GAME)
+		return (END_GAME);
+	    }
+	  else
+	    curr->player.state = (curr->player.state == true ? false : true);
 	  wclear(win);
 	  display_board(curr, win);
 	  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
-	  wprintw(win, "Player %d's turn.", (curr->player.state == true ? 1 : 2));
+	  wprintw(win, "Player %d's turn.\n", (curr->player.state == true ? 1 : 2));
+	  wprintw(win, "Tokens left: %d", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
 	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wrefresh(win);
 	  return (0);
@@ -463,9 +517,10 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	  else if (ch_sum == ESC_KEY)
 	    {
 	      ret = display_menu(curr, win);
-	      wresize(win, curr->h * 2, curr->l);
+	      wresize(win, curr->h + 3, curr->l);
 	      if (ret == NEW_GAME)
 		{
+		  reset_player_tokens(curr);
 		  reset_board(curr);
 		  curr->player.state = (curr->player.first == true ? true : false);
 		  curr->cursy = 0;
@@ -477,7 +532,8 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	  wclear(win);
 	  display_board(curr, win);
 	  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
-	  wprintw(win, "Player %d's turn.", (curr->player.state == true ? 1 : 2));
+	  wprintw(win, "Player %d's turn.\n", (curr->player.state == true ? 1 : 2));
+	  wprintw(win, "Tokens left: %d", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
 	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wrefresh(win);
 	}
@@ -498,6 +554,16 @@ void		ia_cmds(t_game *curr, WINDOW *win)
   curr->player.state = true;
 }
 
+int		end_game(WINDOW *win)
+{
+  wresize(win, MENU_H, MENU_L);
+  wclear(win);
+  wprintw(win, "%sThank you for playing Gomoku.\n%sSee you soon.", TABS, TABS);
+  wrefresh(win);
+  wgetch(win);
+  return (0);
+}
+
 int		manage_game(t_game *curr)
 {
   WINDOW	*win;
@@ -507,18 +573,12 @@ int		manage_game(t_game *curr)
   refresh();
   ret = display_menu(curr, win);
   if (ret == END_GAME)
-    {
-      wresize(win, MENU_H, MENU_L);
-      wclear(win);
-      wprintw(win, "%sThank you for playing Gomoku.\n%sSee you soon.", TABS, TABS);
-      wrefresh(win);
-      wgetch(win);
-      return (0);
-    }
-  wresize(win, curr->h * 2, curr->l);
+    return (end_game(win));
+  wresize(win, curr->h + 3, curr->l + 1);
   display_board(curr, win);
   wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
-  wprintw(win, "Player %d's turn.", (curr->player.state == true ? 1 : 2));
+  wprintw(win, "Player %d's turn.\n", (curr->player.state == true ? 1 : 2));
+  wprintw(win, "Tokens left: %d", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
   wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
   wrefresh(win);
   while (1)
@@ -527,22 +587,12 @@ int		manage_game(t_game *curr)
 	{
 	  ret = player_cmds(curr, win);
 	  if (ret == END_GAME)
-	    {
-	      wresize(win, MENU_H, MENU_L);
-	      wclear(win);
-	      wprintw(win, "%sThank you for playing Gomoku.\n%sSee you soon.", TABS, TABS);
-	      wrefresh(win);
-	      wgetch(win);
-	      return (0);
-	    }
+	    return (end_game(win));
 	}
       else if (curr->options.vs_ia == true && curr->player.state == false)
 	ia_cmds(curr, win);
       else
-	{
-	  wgetch(win);
-	  return (MY_ERROR(-EINVAL, "Something went wrong during the game, exiting now."));
-	}
+	return (MY_ERROR(-EINVAL, "Something went wrong during the game, exiting now."));
     }
   return (0);
 }

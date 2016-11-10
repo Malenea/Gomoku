@@ -30,6 +30,8 @@
 # define	PLAYER_SPOT ('o')
 # define	IA_SPOT ('x')
 
+# define	DRAW_GAME (11)
+
 typedef struct	s_opt
 {
   bool		is_verbose;
@@ -52,6 +54,8 @@ typedef struct	s_player
 {
   bool		first;
   bool		state;
+  unsigned int	player1_tokens;
+  unsigned int	player2_tokens;
 }		t_player;
 
 typedef struct	s_game
