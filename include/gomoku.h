@@ -56,6 +56,8 @@ typedef struct	s_player
   bool		state;
   unsigned int	player1_tokens;
   unsigned int	player2_tokens;
+  unsigned int	player1_capture;
+  unsigned int	player2_capture;
 }		t_player;
 
 typedef struct	s_game

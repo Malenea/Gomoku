@@ -38,6 +38,8 @@ void		reset_player_tokens(t_game *curr)
 {
   curr->player.player1_tokens = 60;
   curr->player.player2_tokens = 60;
+  curr->player.player1_capture = 0;
+  curr->player.player2_capture = 0;
 }
 
 void		init_game(t_game *curr)
@@ -433,7 +435,7 @@ int		display_menu(t_game *curr, WINDOW *win)
 
 int		check_tokens(t_game *curr)
 {
-  if (curr->player.player1_tokens == 0 || curr->player.player2_tokens == 0)
+  if (curr->player.state == true ? curr->player.player2_tokens == 0 : curr->player.player1_tokens == 0)
     return (DRAW_GAME);
   return (0);
 }
@@ -450,6 +452,133 @@ void		game_results(WINDOW *win, int is)
     wprintw(win, "%sPlayer 2 won the game.\n%sAll hail Player 2.", TABS, TABS);
   wrefresh(win);
   wgetch(win);
+}
+
+int		score_arbitrary()
+{
+  return (0);
+}
+
+void		rule_of_two(t_game *curr)
+{
+  //THREAD THIS
+  if (curr->cursx + 2 < curr->l)
+    {
+      if (curr->board[curr->cursy][curr->cursx + 1] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy][curr->cursx + 2] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy][curr->cursx + 3] == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->board[curr->cursy][curr->cursx + 1] = '-';
+	  curr->board[curr->cursy][curr->cursx + 2] = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursx > 2)
+    {
+      if (curr->board[curr->cursy][curr->cursx - 1] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy][curr->cursx - 2] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy][curr->cursx - 3] == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->board[curr->cursy][curr->cursx - 1] = '-';
+	  curr->board[curr->cursy][curr->cursx - 2] = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy + 2 < curr->h)
+    {
+      if (curr->board[curr->cursy + 1][curr->cursx] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy + 2][curr->cursx] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy + 3][curr->cursx] == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->board[curr->cursy + 1][curr->cursx] = '-';
+	  curr->board[curr->cursy + 2][curr->cursx] = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy > 2)
+    {
+      if (curr->board[curr->cursy - 1][curr->cursx] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy - 2][curr->cursx] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy - 3][curr->cursx] == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->board[curr->cursy - 1][curr->cursx] = '-';
+	  curr->board[curr->cursy - 2][curr->cursx] = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy + 2 < curr->h && curr->cursx + 2 < curr->l)
+    {
+      if (curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy + 2][curr->cursx + 2] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy + 3][curr->cursx + 3] == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->board[curr->cursy + 1][curr->cursx + 1] = '-';
+	  curr->board[curr->cursy + 2][curr->cursx + 2] = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy > 2 && curr->cursx > 2)
+    {
+      if (curr->board[curr->cursy - 1][curr->cursx - 1] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy - 2][curr->cursx - 2] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy - 3][curr->cursx - 3] == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->board[curr->cursy - 1][curr->cursx - 1] = '-';
+	  curr->board[curr->cursy - 2][curr->cursx - 2] = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy + 2 < curr->h && curr->cursx > 2)
+    {
+      if (curr->board[curr->cursy + 1][curr->cursx - 1] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy + 2][curr->cursx - 2] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy + 3][curr->cursx - 3] == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->board[curr->cursy + 1][curr->cursx - 1] = '-';
+	  curr->board[curr->cursy + 2][curr->cursx - 2] = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy > 2 && curr->cursx + 2 < curr->l)
+    {
+      if (curr->board[curr->cursy - 1][curr->cursx + 1] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy - 2][curr->cursx + 2] == (curr->player.state == true ? 'x' : 'o')
+	  && curr->board[curr->cursy - 3][curr->cursx + 3] == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->board[curr->cursy - 1][curr->cursx + 1] = '-';
+	  curr->board[curr->cursy - 2][curr->cursx + 2] = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+}
+
+void		check_arbitrary(t_game *curr)
+{
+  rule_of_two(curr);
 }
 
 int		player_cmds(t_game *curr, WINDOW *win)
@@ -475,8 +604,9 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	      curr->board[curr->cursy][curr->cursx] = 'o';
 	      curr->player.player1_tokens -= 1;
 	    }
+	  check_arbitrary(curr);
+	  //SCORE_ARBITRARY
 	  ret = check_tokens(curr);
-	  //CHECK_ARBITRARY
 	  if (ret == DRAW_GAME)
 	    {
 	      game_results(win, 0);
@@ -499,7 +629,8 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	  display_board(curr, win);
 	  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wprintw(win, "Player %d's turn.\n", (curr->player.state == true ? 1 : 2));
-	  wprintw(win, "Tokens left: %d", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
+	  wprintw(win, "Tokens left: %d\n", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
+	  wprintw(win, "Tokens own: %d", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
 	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wrefresh(win);
 	  return (0);
@@ -517,7 +648,7 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	  else if (ch_sum == ESC_KEY)
 	    {
 	      ret = display_menu(curr, win);
-	      wresize(win, curr->h + 3, curr->l);
+	      wresize(win, curr->h + 4, curr->l);
 	      if (ret == NEW_GAME)
 		{
 		  reset_player_tokens(curr);
@@ -533,7 +664,8 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	  display_board(curr, win);
 	  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wprintw(win, "Player %d's turn.\n", (curr->player.state == true ? 1 : 2));
-	  wprintw(win, "Tokens left: %d", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
+	  wprintw(win, "Tokens left: %d\n", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
+	  wprintw(win, "Tokens own: %d", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
 	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wrefresh(win);
 	}
@@ -574,11 +706,12 @@ int		manage_game(t_game *curr)
   ret = display_menu(curr, win);
   if (ret == END_GAME)
     return (end_game(win));
-  wresize(win, curr->h + 3, curr->l + 1);
+  wresize(win, curr->h + 4, curr->l + 1);
   display_board(curr, win);
   wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
   wprintw(win, "Player %d's turn.\n", (curr->player.state == true ? 1 : 2));
-  wprintw(win, "Tokens left: %d", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
+  wprintw(win, "Tokens left: %d\n", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
+  wprintw(win, "Tokens own: %d", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
   wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
   wrefresh(win);
   while (1)
