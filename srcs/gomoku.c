@@ -648,7 +648,7 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	  else if (ch_sum == ESC_KEY)
 	    {
 	      ret = display_menu(curr, win);
-	      wresize(win, curr->h + 4, curr->l);
+	      wresize(win, curr->h + 4, curr->l + 1);
 	      if (ret == NEW_GAME)
 		{
 		  reset_player_tokens(curr);
