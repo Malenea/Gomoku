@@ -581,17 +581,73 @@ void		check_arbitrary(t_game *curr)
   rule_of_two(curr);
 }
 
+int		authorize_rule_of_two(t_game *curr, WINDOW *win)
+{
+  int		ret = 1;
+
+  if (curr->cursx + 2 < curr->h && curr->cursx > 1)
+    if (curr->board[curr->cursy][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+	&& curr->board[curr->cursy][curr->cursx + 2] == (curr->player.state == true? 'x' : 'o')
+	&& curr->board[curr->cursy][curr->cursx - 1] == (curr->player.state == true ? 'x' : 'o'))
+      ret = 0;
+  if (curr->cursx + 1 < curr->h && curr->cursx > 2)
+    if (curr->board[curr->cursy][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
+	&& curr->board[curr->cursy][curr->cursx - 2] == (curr->player.state == true? 'x' : 'o')
+	&& curr->board[curr->cursy][curr->cursx + 1] == (curr->player.state == true ? 'x' : 'o'))
+      ret = 0;
+  if (curr->cursy + 2 < curr->l && curr->cursy > 1)
+    if (curr->board[curr->cursy + 1][curr->cursx] == (curr->player.state == true ? 'o' : 'x')
+	&& curr->board[curr->cursy + 2][curr->cursx] == (curr->player.state == true? 'x' : 'o')
+	&& curr->board[curr->cursy - 1][curr->cursx] == (curr->player.state == true ? 'x' : 'o'))
+      ret = 0;
+  if (curr->cursy + 1 < curr->l && curr->cursy > 2)
+    if (curr->board[curr->cursy - 1][curr->cursx] == (curr->player.state == true ? 'o' : 'x')
+	&& curr->board[curr->cursy - 2][curr->cursx] == (curr->player.state == true? 'x' : 'o')
+	&& curr->board[curr->cursy + 1][curr->cursx] == (curr->player.state == true ? 'x' : 'o'))
+      ret = 0;
+  if (curr->cursy + 2 < curr->h && curr->cursx + 2 < curr->l && curr->cursy > 1 && curr->cursx > 1)
+    if (curr->board[curr->cursy - 1][curr->cursx - 1] == (curr->player.state == true ? 'x' : 'o')
+	&& curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+	&& curr->board[curr->cursy + 2][curr->cursx + 2] == (curr->player.state == true ? 'x' : 'o'))
+      ret = 0;
+  if (curr->cursy > 2 && curr->cursx + 2 < curr->l && curr->cursy + 1 < curr->h && curr->cursx > 1)
+    if (curr->board[curr->cursy - 1][curr->cursx - 1] == (curr->player.state == true ? 'x' : 'o')
+	&& curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+	&& curr->board[curr->cursy + 2][curr->cursx + 2] == (curr->player.state == true ? 'x' : 'o'))
+      ret = 0;
+  if (curr->cursy + 1 < curr->h && curr->cursx + 1 < curr->l && curr->cursy > 2 && curr->cursx > 2)
+    if (curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'x' : 'o')
+	&& curr->board[curr->cursy - 1][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
+	&& curr->board[curr->cursy - 2][curr->cursx - 2] == (curr->player.state == true ? 'x' : 'o'))
+      ret = 0;
+  if (curr->cursy > 1 && curr->cursx + 1 < curr->l && curr->cursy + 2 < curr->h && curr->cursx > 2)
+    if (curr->board[curr->cursy - 1][curr->cursx + 1] == (curr->player.state == true ? 'x' : 'o')
+	&& curr->board[curr->cursy + 1][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
+	&& curr->board[curr->cursy + 2][curr->cursx - 2] == (curr->player.state == true ? 'x' : 'o'))
+      ret = 0;
+  return (ret);
+}
+
+int		authorize_arbitrary(t_game *curr, WINDOW *win)
+{
+  int		ret;
+
+  ret = authorize_rule_of_two(curr, win);
+  return (ret);
+}
+
 int		player_cmds(t_game *curr, WINDOW *win)
 {
   char		ch[4];
   int		ch_sum;
   int		ret;
+  int		ret2 = 1;
 
   reset_key(ch);
   while (read(0, ch, 4))
     {
       ch_sum = ch[0] + ch[1] + ch[2] + ch[3];
-      if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-')
+      if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-' && (ret2 = authorize_arbitrary(curr, win)))
 	{
 	  if (curr->options.vs_ia == false)
 	    {
@@ -628,9 +684,10 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	  wclear(win);
 	  display_board(curr, win);
 	  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
-	  wprintw(win, "Player %d's turn.\n", (curr->player.state == true ? 1 : 2));
+	  wprintw(win, "Player %d's turn\n", (curr->player.state == true ? 1 : 2));
 	  wprintw(win, "Tokens left: %d\n", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
-	  wprintw(win, "Tokens own: %d", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
+	  wprintw(win, "Tokens own: %d\n", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
+	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	  wrefresh(win);
 	  return (0);
@@ -648,7 +705,7 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	  else if (ch_sum == ESC_KEY)
 	    {
 	      ret = display_menu(curr, win);
-	      wresize(win, curr->h + 4, curr->l + 1);
+	      wresize(win, curr->h + 5, curr->l + 1);
 	      if (ret == NEW_GAME)
 		{
 		  reset_player_tokens(curr);
@@ -662,11 +719,21 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	    }
 	  wclear(win);
 	  display_board(curr, win);
-	  wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
-	  wprintw(win, "Player %d's turn.\n", (curr->player.state == true ? 1 : 2));
-	  wprintw(win, "Tokens left: %d\n", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
-	  wprintw(win, "Tokens own: %d", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
-	  wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
+	  if (ret2 == 1)
+	    {
+	      wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
+	      wprintw(win, "Player %d's turn\n", (curr->player.state == true ? 1 : 2));
+	      wprintw(win, "Tokens left: %d\n", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
+	      wprintw(win, "Tokens own: %d\n", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
+	      wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
+	    }
+	  else
+	    {
+	      wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
+	      wprintw(win, "Bad move\n(rule of two)");
+	      wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
+	    }
+	  ret2 = 1;
 	  wrefresh(win);
 	}
       reset_key(ch);
@@ -706,10 +773,10 @@ int		manage_game(t_game *curr)
   ret = display_menu(curr, win);
   if (ret == END_GAME)
     return (end_game(win));
-  wresize(win, curr->h + 4, curr->l + 1);
+  wresize(win, curr->h + 5, curr->l + 1);
   display_board(curr, win);
   wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
-  wprintw(win, "Player %d's turn.\n", (curr->player.state == true ? 1 : 2));
+  wprintw(win, "Player %d's turn\n", (curr->player.state == true ? 1 : 2));
   wprintw(win, "Tokens left: %d\n", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
   wprintw(win, "Tokens own: %d", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
   wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
