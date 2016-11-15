@@ -41,6 +41,9 @@
 # define	PLAYER_SPOT ('o')
 # define	IA_SPOT ('x')
 
+# define	RULE_OF_TWO (-2)
+# define	RULE_OF_THREE (-3)
+
 # define	DRAW_GAME (11)
 
 typedef struct	s_opt

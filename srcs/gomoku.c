@@ -578,61 +578,91 @@ int		authorize_rule_of_two(t_game *curr)
     if (curr->board[curr->cursy][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
 	&& curr->board[curr->cursy][curr->cursx + 2] == (curr->player.state == true? 'x' : 'o')
 	&& curr->board[curr->cursy][curr->cursx - 1] == (curr->player.state == true ? 'x' : 'o'))
-      ret = 0;
+      ret = RULE_OF_TWO;
   if (curr->cursx + 1 < curr->h && curr->cursx > 2)
     if (curr->board[curr->cursy][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
 	&& curr->board[curr->cursy][curr->cursx - 2] == (curr->player.state == true? 'x' : 'o')
 	&& curr->board[curr->cursy][curr->cursx + 1] == (curr->player.state == true ? 'x' : 'o'))
-      ret = 0;
+      ret = RULE_OF_TWO;
   if (curr->cursy + 2 < curr->l && curr->cursy > 1)
     if (curr->board[curr->cursy + 1][curr->cursx] == (curr->player.state == true ? 'o' : 'x')
 	&& curr->board[curr->cursy + 2][curr->cursx] == (curr->player.state == true? 'x' : 'o')
 	&& curr->board[curr->cursy - 1][curr->cursx] == (curr->player.state == true ? 'x' : 'o'))
-      ret = 0;
+      ret = RULE_OF_TWO;
   if (curr->cursy + 1 < curr->l && curr->cursy > 2)
     if (curr->board[curr->cursy - 1][curr->cursx] == (curr->player.state == true ? 'o' : 'x')
 	&& curr->board[curr->cursy - 2][curr->cursx] == (curr->player.state == true? 'x' : 'o')
 	&& curr->board[curr->cursy + 1][curr->cursx] == (curr->player.state == true ? 'x' : 'o'))
-      ret = 0;
+      ret = RULE_OF_TWO;
   if (curr->cursy + 2 < curr->h && curr->cursx + 2 < curr->l && curr->cursy > 1 && curr->cursx > 1)
     if (curr->board[curr->cursy - 1][curr->cursx - 1] == (curr->player.state == true ? 'x' : 'o')
 	&& curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
 	&& curr->board[curr->cursy + 2][curr->cursx + 2] == (curr->player.state == true ? 'x' : 'o'))
-      ret = 0;
+      ret = RULE_OF_TWO;
   if (curr->cursy > 2 && curr->cursx + 2 < curr->l && curr->cursy + 1 < curr->h && curr->cursx > 1)
     if (curr->board[curr->cursy - 1][curr->cursx - 1] == (curr->player.state == true ? 'x' : 'o')
 	&& curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
 	&& curr->board[curr->cursy + 2][curr->cursx + 2] == (curr->player.state == true ? 'x' : 'o'))
-      ret = 0;
+      ret = RULE_OF_TWO;
   if (curr->cursy + 1 < curr->h && curr->cursx + 1 < curr->l && curr->cursy > 2 && curr->cursx > 2)
     if (curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'x' : 'o')
 	&& curr->board[curr->cursy - 1][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
 	&& curr->board[curr->cursy - 2][curr->cursx - 2] == (curr->player.state == true ? 'x' : 'o'))
-      ret = 0;
+      ret = RULE_OF_TWO;
   if (curr->cursy > 1 && curr->cursx + 1 < curr->l && curr->cursy + 2 < curr->h && curr->cursx > 2)
     if (curr->board[curr->cursy - 1][curr->cursx + 1] == (curr->player.state == true ? 'x' : 'o')
 	&& curr->board[curr->cursy + 1][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
 	&& curr->board[curr->cursy + 2][curr->cursx - 2] == (curr->player.state == true ? 'x' : 'o'))
-      ret = 0;
+      ret = RULE_OF_TWO;
   return (ret);
 }
 
 int		authorize_rule_of_three(t_game *curr)
 {
   int		ret = 1;
+  char		curr_char = (curr->player.state == true ? 'o' : 'x');
 
   if (curr->cursx > 2 && curr->cursx + 2 < curr->l)
     {
-      if (curr->board[curr->cursy][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
-	  && curr->board[curr->cursy][curr->cursx - 2] == (curr->player.state == true ? 'o' : 'x')
+      if (curr->board[curr->cursy][curr->cursx - 1] == curr_char
+	  && curr->board[curr->cursy][curr->cursx - 2] == curr_char
 	  && ((curr->cursy > 2
-	       && curr->board[curr->cursy - 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
-	       && curr->board[curr->cursy - 2][curr->cursx + 2] == (curr->player.state == true ? 'o' : 'x'))
+	       && curr->board[curr->cursy - 1][curr->cursx + 1] == curr_char
+	       && curr->board[curr->cursy - 2][curr->cursx + 2] == curr_char)
 	      || (curr->cursy + 2 < curr->h
-		  && curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
-		  && curr->board[curr->cursy + 1][curr->cursx + 2] == (curr->player.state == true ? 'o' : 'x'))))
-	{
-	}
+		  && curr->board[curr->cursy + 1][curr->cursx + 1] == curr_char
+		  && curr->board[curr->cursy + 2][curr->cursx + 2] == curr_char)))
+	ret = RULE_OF_THREE;
+      if (curr->board[curr->cursy][curr->cursx + 1] == curr_char
+	  && curr->board[curr->cursy][curr->cursx + 2] == curr_char
+	  && ((curr->cursy > 2
+	       && curr->board[curr->cursy - 1][curr->cursx - 1] == curr_char
+	       && curr->board[curr->cursy - 2][curr->cursx - 2] == curr_char)
+	      || (curr->cursy + 2 < curr->h
+		  && curr->board[curr->cursy + 1][curr->cursx - 1] == curr_char
+		  && curr->board[curr->cursy + 2][curr->cursx - 2] == curr_char)))
+	ret = RULE_OF_THREE;
+    }
+  if (curr->cursy > 2 && curr->cursy + 2 < curr->h)
+    {
+      if (curr->board[curr->cursy - 1][curr->cursx] == curr_char
+	  && curr->board[curr->cursy - 2][curr->cursx] == curr_char
+	  && ((curr->cursx > 2
+	       && curr->board[curr->cursy + 1][curr->cursx - 1] == curr_char
+	       && curr->board[curr->cursy + 2][curr->cursx - 2] == curr_char)
+	      || (curr->cursx + 2 < curr->l
+		  && curr->board[curr->cursy + 1][curr->cursx + 1] == curr_char
+		  && curr->board[curr->cursy + 2][curr->cursx + 2] == curr_char)))
+	ret = RULE_OF_THREE;
+      if (curr->board[curr->cursy + 1][curr->cursx] == curr_char
+	  && curr->board[curr->cursy + 2][curr->cursx] == curr_char
+	  && ((curr->cursx > 2
+	       && curr->board[curr->cursy - 1][curr->cursx - 1] == curr_char
+	       && curr->board[curr->cursy - 2][curr->cursx - 2] == curr_char)
+	      || (curr->cursy + 2 < curr->h
+		  && curr->board[curr->cursy - 1][curr->cursx + 1] == curr_char
+		  && curr->board[curr->cursy - 2][curr->cursx + 2] == curr_char)))
+	ret = RULE_OF_THREE;
     }
   return (ret);
 }
@@ -642,6 +672,8 @@ int		authorize_arbitrary(t_game *curr)
   int		ret;
 
   ret = authorize_rule_of_two(curr);
+  if (ret == 1)
+    ret = authorize_rule_of_three(curr);
   return (ret);
 }
 
@@ -656,7 +688,7 @@ int		player_cmds(t_game *curr, WINDOW *win)
   while (read(0, ch, 4))
     {
       ch_sum = ch[0] + ch[1] + ch[2] + ch[3];
-      if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-' && (ret2 = authorize_arbitrary(curr)))
+      if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-' && (ret2 = authorize_arbitrary(curr) > 0))
 	{
 	  if (curr->options.vs_ia == false)
 	    {
@@ -739,7 +771,7 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	  else
 	    {
 	      wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
-	      wprintw(win, "Bad move\n(rule of two)");
+	      wprintw(win, "Bad move\n(%s)", ret2 == RULE_OF_TWO ? "rule of two" : "rule of three");
 	      wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	    }
 	  ret2 = 1;
