@@ -685,13 +685,28 @@ int		score_arbitrary(t_game *curr)
     return (WIN_GAME);
   while (posx > 0 && curr->board[posy][posx] == (curr->player.state == true ? 'o' : 'x'))
     posx -= 1;
-  posx += 1;
+  if (posx > 0)
+    posx += 1;
   while (curr->board[posy][posx] == (curr->player.state == true ? 'o' : 'x'))
     {
       res += 1;
       posx += 1;
     }
-  if (res >= 5)
+  if (res == 5)
+    return (WIN_GAME);
+  posy = curr->cursy;
+  posx = curr->cursx;
+  res = 0;
+  while (posy > 0 && curr->board[posy][posx] == (curr->player.state == true ? 'o' : 'x'))
+    posy -= 1;
+  if (posy > 0)
+    posy += 1;
+  while (curr->board[posy][posx] == (curr->player.state == true ? 'o' : 'x'))
+    {
+      res += 1;
+      posy += 1;
+    }
+  if (res == 5)
     return (WIN_GAME);
   posy = curr->cursy;
   posx = curr->cursx;
@@ -701,33 +716,39 @@ int		score_arbitrary(t_game *curr)
       posy -= 1;
       posx -= 1;
     }
-  posy += 1;
-  posx += 1;
+  if (posy > 0 && posx > 0)
+    {
+      posy += 1;
+      posx += 1;
+    }
   while (curr->board[posy][posx] == (curr->player.state == true ? 'o' : 'x'))
     {
       res += 1;
       posy += 1;
       posx += 1;
     }
-  if (res >= 5)
+  if (res == 5)
     return (WIN_GAME);
   posy = curr->cursy;
   posx = curr->cursx;
   res = 0;
-  while (posy > 0 && posx > 0 && curr->board[posy][posx] == (curr->player.state == true ? 'o' : 'x'))
+  while (posx > 0 && curr->board[posy][posx] == (curr->player.state == true ? 'o' : 'x'))
     {
       posy += 1;
       posx -= 1;
     }
-  posy -= 1;
-  posx += 1;
+  if (posx > 0)
+    {
+      posy -= 1;
+      posx += 1;
+    }
   while (curr->board[posy][posx] == (curr->player.state == true ? 'o' : 'x'))
     {
       res += 1;
       posy -= 1;
       posx += 1;
     }
-  if (res >= 5)
+  if (res == 5)
     return (WIN_GAME);
   return (0);
 }
