@@ -45,6 +45,7 @@
 # define	RULE_OF_THREE (-3)
 
 # define	DRAW_GAME (11)
+# define	WIN_GAME (42)
 
 typedef struct	s_opt
 {

@@ -443,11 +443,6 @@ void		game_results(WINDOW *win, int is)
   wgetch(win);
 }
 
-int		score_arbitrary()
-{
-  return (0);
-}
-
 void		rule_of_two(t_game *curr)
 {
   //THREAD THIS
@@ -680,6 +675,13 @@ int		authorize_arbitrary(t_game *curr)
   return (ret);
 }
 
+int		score_arbitrary(t_game *curr)
+{
+  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture) == 10)
+    return (WIN_GAME);
+  return (0);
+}
+
 int		player_cmds(t_game *curr, WINDOW *win)
 {
   char		ch[4];
@@ -705,7 +707,22 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	      curr->player.player1_tokens -= 1;
 	    }
 	  check_arbitrary(curr);
-	  //SCORE_ARBITRARY
+	  if (score_arbitrary(curr) == WIN_GAME)
+	    {
+	      game_results(win, (curr->player.state == true ? 1 : 2));
+	      curr->state = 0;
+	      ret = display_menu(curr, win);
+	      if (ret == NEW_GAME)
+		{
+		  reset_player_tokens(curr);
+		  reset_board(curr);
+		  curr->player.state = (curr->player.first == true ? true : false);
+		  curr->cursy = 0;
+		  curr->cursx = 0;
+		}
+	      else if (ret == END_GAME)
+		return (END_GAME);
+	    }
 	  ret = check_tokens(curr);
 	  if (ret == DRAW_GAME)
 	    {
