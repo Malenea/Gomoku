@@ -1,14 +1,3 @@
-#include	<sys/types.h>
-#include	<sys/stat.h>
-#include	<fcntl.h>
-#include	<stdio.h>
-#include	<stdlib.h>
-#include	<string.h>
-#include	<unistd.h>
-#include	<stdbool.h>
-#include	<errno.h>
-#include	<getopt.h>
-#include	<ncurses.h>
 #include	"gomoku.h"
 
 void		end_board(t_game *curr)
@@ -581,7 +570,7 @@ void		check_arbitrary(t_game *curr)
   rule_of_two(curr);
 }
 
-int		authorize_rule_of_two(t_game *curr, WINDOW *win)
+int		authorize_rule_of_two(t_game *curr)
 {
   int		ret = 1;
 
@@ -628,11 +617,31 @@ int		authorize_rule_of_two(t_game *curr, WINDOW *win)
   return (ret);
 }
 
-int		authorize_arbitrary(t_game *curr, WINDOW *win)
+int		authorize_rule_of_three(t_game *curr)
+{
+  int		ret = 1;
+
+  if (curr->cursx > 2 && curr->cursx + 2 < curr->l)
+    {
+      if (curr->board[curr->cursy][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
+	  && curr->board[curr->cursy][curr->cursx - 2] == (curr->player.state == true ? 'o' : 'x')
+	  && ((curr->cursy > 2
+	       && curr->board[curr->cursy - 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+	       && curr->board[curr->cursy - 2][curr->cursx + 2] == (curr->player.state == true ? 'o' : 'x'))
+	      || (curr->cursy + 2 < curr->h
+		  && curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+		  && curr->board[curr->cursy + 1][curr->cursx + 2] == (curr->player.state == true ? 'o' : 'x'))))
+	{
+	}
+    }
+  return (ret);
+}
+
+int		authorize_arbitrary(t_game *curr)
 {
   int		ret;
 
-  ret = authorize_rule_of_two(curr, win);
+  ret = authorize_rule_of_two(curr);
   return (ret);
 }
 
@@ -647,7 +656,7 @@ int		player_cmds(t_game *curr, WINDOW *win)
   while (read(0, ch, 4))
     {
       ch_sum = ch[0] + ch[1] + ch[2] + ch[3];
-      if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-' && (ret2 = authorize_arbitrary(curr, win)))
+      if (ch_sum == SPACE_KEY && curr->board[curr->cursy][curr->cursx] == '-' && (ret2 = authorize_arbitrary(curr)))
 	{
 	  if (curr->options.vs_ia == false)
 	    {

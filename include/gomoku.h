@@ -1,6 +1,17 @@
 #ifndef		_GOMOKU_H_
 # define	_GOMOKU_H_
 
+# include	<sys/types.h>
+# include	<sys/stat.h>
+# include	<fcntl.h>
+# include	<stdio.h>
+# include	<stdlib.h>
+# include	<string.h>
+# include	<unistd.h>
+# include	<stdbool.h>
+# include	<errno.h>
+# include	<getopt.h>
+# include	<ncurses.h>
 # include	"trace.h"
 
 # define	DEFAULT_VALUE (19)
