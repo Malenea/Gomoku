@@ -620,48 +620,51 @@ int		authorize_rule_of_two(t_game *curr)
 int		authorize_rule_of_three(t_game *curr)
 {
   int		ret = 1;
-  char		curr_char = (curr->player.state == true ? 'o' : 'x');
 
   if (curr->cursx > 2 && curr->cursx + 2 < curr->l)
     {
-      if (curr->board[curr->cursy][curr->cursx - 1] == curr_char
-	  && curr->board[curr->cursy][curr->cursx - 2] == curr_char
+      if (curr->board[curr->cursy][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
+	  && curr->board[curr->cursy][curr->cursx - 2] == (curr->player.state == true ? 'o' : 'x')
+	  && curr->board[curr->cursy][curr->cursx + 1] != (curr->player.state == true ? 'x' : 'o')
 	  && ((curr->cursy > 2
-	       && curr->board[curr->cursy - 1][curr->cursx + 1] == curr_char
-	       && curr->board[curr->cursy - 2][curr->cursx + 2] == curr_char)
+	       && curr->board[curr->cursy - 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+	       && curr->board[curr->cursy - 2][curr->cursx + 2] == (curr->player.state == true ? 'o' : 'x'))
 	      || (curr->cursy + 2 < curr->h
-		  && curr->board[curr->cursy + 1][curr->cursx + 1] == curr_char
-		  && curr->board[curr->cursy + 2][curr->cursx + 2] == curr_char)))
+		  && curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+		  && curr->board[curr->cursy + 2][curr->cursx + 2] == (curr->player.state == true ? 'o' : 'x'))))
 	ret = RULE_OF_THREE;
-      if (curr->board[curr->cursy][curr->cursx + 1] == curr_char
-	  && curr->board[curr->cursy][curr->cursx + 2] == curr_char
+      if (curr->board[curr->cursy][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+	  && curr->board[curr->cursy][curr->cursx + 2] == (curr->player.state == true ? 'o' : 'x')
+	  && curr->board[curr->cursy][curr->cursx - 1] != (curr->player.state == true ? 'x' : 'o')
 	  && ((curr->cursy > 2
-	       && curr->board[curr->cursy - 1][curr->cursx - 1] == curr_char
-	       && curr->board[curr->cursy - 2][curr->cursx - 2] == curr_char)
+	       && curr->board[curr->cursy - 1][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
+	       && curr->board[curr->cursy - 2][curr->cursx - 2] == (curr->player.state == true ? 'o' : 'x'))
 	      || (curr->cursy + 2 < curr->h
-		  && curr->board[curr->cursy + 1][curr->cursx - 1] == curr_char
-		  && curr->board[curr->cursy + 2][curr->cursx - 2] == curr_char)))
+		  && curr->board[curr->cursy + 1][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
+		  && curr->board[curr->cursy + 2][curr->cursx - 2] == (curr->player.state == true ? 'o' : 'x'))))
 	ret = RULE_OF_THREE;
     }
   if (curr->cursy > 2 && curr->cursy + 2 < curr->h)
     {
-      if (curr->board[curr->cursy - 1][curr->cursx] == curr_char
-	  && curr->board[curr->cursy - 2][curr->cursx] == curr_char
+      if (curr->board[curr->cursy - 1][curr->cursx] == (curr->player.state == true ? 'o' : 'x')
+	  && curr->board[curr->cursy - 2][curr->cursx] == (curr->player.state == true ? 'o' : 'x')
+	  && curr->board[curr->cursy + 1][curr->cursx] != (curr->player.state == true ? 'x' : 'o')
 	  && ((curr->cursx > 2
-	       && curr->board[curr->cursy + 1][curr->cursx - 1] == curr_char
-	       && curr->board[curr->cursy + 2][curr->cursx - 2] == curr_char)
+	       && curr->board[curr->cursy + 1][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
+	       && curr->board[curr->cursy + 2][curr->cursx - 2] == (curr->player.state == true ? 'o' : 'x'))
 	      || (curr->cursx + 2 < curr->l
-		  && curr->board[curr->cursy + 1][curr->cursx + 1] == curr_char
-		  && curr->board[curr->cursy + 2][curr->cursx + 2] == curr_char)))
+		  && curr->board[curr->cursy + 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+		  && curr->board[curr->cursy + 2][curr->cursx + 2] == (curr->player.state == true ? 'o' : 'x'))))
 	ret = RULE_OF_THREE;
-      if (curr->board[curr->cursy + 1][curr->cursx] == curr_char
-	  && curr->board[curr->cursy + 2][curr->cursx] == curr_char
+      if (curr->board[curr->cursy + 1][curr->cursx] == (curr->player.state == true ? 'o' : 'x')
+	  && curr->board[curr->cursy + 2][curr->cursx] == (curr->player.state == true ? 'o' : 'x')
+	  && curr->board[curr->cursy - 1][curr->cursx] != (curr->player.state == true ? 'x' : 'o')
 	  && ((curr->cursx > 2
-	       && curr->board[curr->cursy - 1][curr->cursx - 1] == curr_char
-	       && curr->board[curr->cursy - 2][curr->cursx - 2] == curr_char)
+	       && curr->board[curr->cursy - 1][curr->cursx - 1] == (curr->player.state == true ? 'o' : 'x')
+	       && curr->board[curr->cursy - 2][curr->cursx - 2] == (curr->player.state == true ? 'o' : 'x'))
 	      || (curr->cursy + 2 < curr->h
-		  && curr->board[curr->cursy - 1][curr->cursx + 1] == curr_char
-		  && curr->board[curr->cursy - 2][curr->cursx + 2] == curr_char)))
+		  && curr->board[curr->cursy - 1][curr->cursx + 1] == (curr->player.state == true ? 'o' : 'x')
+		  && curr->board[curr->cursy - 2][curr->cursx + 2] == (curr->player.state == true ? 'o' : 'x'))))
 	ret = RULE_OF_THREE;
     }
   return (ret);
