@@ -49,71 +49,14 @@ int		authorize_rule_of_two(t_game *curr)
 }
 */
 
-int		authorize_rule_of_three(t_game *curr)
-{
-  int		ret = 1;
-
-  if (curr->cursy >= 0 && curr->cursy <= curr->h)
-    {
-      if (((curr->cursy > 1
-	    && curr->goban[curr->cursy - 1][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x')
-	    && curr->goban[curr->cursy - 2][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x')
-	    && ((curr->cursy < curr->h
-		 && curr->goban[curr->cursy + 1][curr->cursx].cont != (curr->player.state == true ? 'x' : 'o'))
-		|| (curr->cursy > 2
-		    && curr->goban[curr->cursy - 3][curr->cursx].cont != (curr->player.state == true ? 'x' : 'o'))))
-
-	   || (curr->cursy > 0 && curr->cursy < curr->h
-	       && curr->goban[curr->cursy - 1][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x')
-	       && curr->goban[curr->cursy + 1][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x')
-	       && ((curr->cursy + 1 < curr->h
-		    && curr->goban[curr->cursy + 1][curr->cursx].cont != (curr->player.state == true ? 'x' : 'o'))
-		   || (curr->cursy > 1
-		       && curr->goban[curr->cursy - 3][curr->cursx].cont != (curr->player.state == true ? 'x' : 'o'))))
-
-	   (curr->cursy - 1 < curr->h
-	    && curr->goban[curr->cursy + 1][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x')
-	    && curr->goban[curr->cursy + 2][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x')
-	    && ((curr->cursy + 2 < curr->h
-		 && curr->goban[curr->cursy + 3][curr->cursx].cont != (curr->player.state == true ? 'x' : 'o'))
-		|| (curr->cursy > 0
-		    && curr->goban[curr->cursy - 1][curr->cursx].cont != (curr->player.state == true ? 'x' : 'o')))))
-	  
-	  && ((curr->cursx > 1
-	       && curr->goban[curr->cursy][curr->cursx - 1].cont == (curr->player.state == true ? 'o' : 'x')
-	       && curr->goban[curr->cursy][curr->cursx - 2].cont == (curr->player.state == true ? 'o' : 'x')
-	       && ((curr->cursx < curr->l
-		    && curr->goban[curr->cursy][curr->cursx + 1].cont != (curr->player.state == true ? 'x' : 'o'))
-		   || (curr->cursx > 2
-		       && curr->goban[curr->cursy][curr->cursx - 3].cont != (curr->player.state == true ? 'x' : 'o'))))
-	    || (curr->cursx > 0 && curr->cursx < curr->l
-	       && curr->goban[curr->cursy][curr->cursx - 1].cont == (curr->player.state == true ? 'o' : 'x')
-	       && curr->goban[curr->cursy][curr->cursx + 1].cont == (curr->player.state == true ? 'o' : 'x')
-	       && ((curr->cursx + 1 < curr->l
-		    && curr->goban[curr->cursy][curr->cursx + 1].cont != (curr->player.state == true ? 'x' : 'o'))
-		   || (curr->cursx > 1
-		       && curr->goban[curr->cursy][curr->cursx - 3].cont != (curr->player.state == true ? 'x' : 'o'))))
-	   (curr->cursx - 1 < curr->l
-	    && curr->goban[curr->cursy][curr->cursx + 1].cont == (curr->player.state == true ? 'o' : 'x')
-	    && curr->goban[curr->cursy][curr->cursx + 2].cont == (curr->player.state == true ? 'o' : 'x')
-	    && ((curr->cursx + 2 < curr->l
-		 && curr->goban[curr->cursy][curr->cursx + 3].cont != (curr->player.state == true ? 'x' : 'o'))
-		|| (curr->cursx > 0
-		    && curr->goban[curr->cursy][curr->cursx - 1].cont != (curr->player.state == true ? 'x' : 'o'))))))
-	ret = RULE_OF_THREE;
-    }
-  return (ret);
-}
-
 int		arbitrary(arbitrary_type is, t_game *curr)
 {
   int		ret = 0;
 
   if (is == AUTHORITY)
     {
-      ret = 1;
       if (curr->rules.r3 == true)
-	  ret = authorize_rule_of_three(curr);
+	ret = authorize_rule_of_three(curr);
       return (ret);
     }
   else if (is == CHECK)
@@ -136,7 +79,7 @@ int		player_cmds(t_game *curr, WINDOW *win)
   while (read(0, ch, 4))
     {
       ch_sum = ch[0] + ch[1] + ch[2] + ch[3];
-      if (ch_sum == SPACE_KEY && curr->goban[curr->cursy][curr->cursx].cont == '-' && (ret2 = arbitrary(AUTHORITY, curr) > 0))
+      if (ch_sum == SPACE_KEY && curr->goban[curr->cursy][curr->cursx].cont == '-' && (ret2 = arbitrary(AUTHORITY, curr) == 0))
 	{
 	  if (curr->options.vs_ia == false)
 	    {
@@ -150,8 +93,8 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	      curr->player.player1_tokens -= 1;
 	    }
 	  /*
-	  check_arbitrary(curr);
-	  if (score_arbitrary(curr) == WIN_GAME)
+	  arbitrary(CHECK, curr);
+	  if (arbitrary(SCORE, curr) == WIN_GAME)
 	    {
 	      game_results(win, (curr->player.state == true ? 1 : 2));
 	      curr->state = 0;
@@ -205,17 +148,15 @@ new_game(curr);
 	    }
 	  wclear(win);
 	  print_goban(curr, win);
-	  //if (ret2 == 1)
+	  if (ret2 == 1)
 	    print_infos(curr, win);
-	    /*
 	  else
 	    {
 	      wattron(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
-	      wprintw(win, "Bad move\n(%s)", ret2 == RULE_OF_TWO ? "rule of two" : "rule of three");
+	      wprintw(win, "Bad move\n(rule of three)");
 	      wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 	    }
 	  ret2 = 1;
-	    */
 	  wrefresh(win);
 	}
       reset_key(ch);
@@ -239,7 +180,7 @@ int		game_loop(t_game *curr, WINDOW *win)
 {
   int		ret;
 
-  wresize(win, curr->h + 5, curr->l + 1);
+  wresize(win, curr->h + 6, curr->l + 1);
   print_goban(curr, win);
   print_infos(curr, win);
   wrefresh(win);

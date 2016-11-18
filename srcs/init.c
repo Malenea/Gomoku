@@ -12,7 +12,7 @@ void		reset_goban(t_game *curr)
 
 void		new_game(t_game *curr, WINDOW *win)
 {
-  wresize(win, curr->h + 5, curr->l + 1);
+  wresize(win, curr->h + 6, curr->l + 1);
   init_players(curr);
   reset_goban(curr);
   init_cursor(curr);

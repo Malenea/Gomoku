@@ -133,6 +133,12 @@ void		init_game(t_game *curr);
 int		init_goban(t_game *curr);
 
 /*
+** Rules functions
+*/
+
+int		authorize_rule_of_three(t_game *curr);
+
+/*
 ** Print functions
 */
 

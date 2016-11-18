@@ -27,6 +27,7 @@ COMM_OBJS_P	:= $(COMM_SRCS_P)objs/
 SRCS		:= $(SRCS_P)gomoku.c\
 		   $(SRCS_P)title.c\
 		   $(SRCS_P)init.c\
+		   $(SRCS_P)rule_of_three.c\
 		   $(SRCS_P)key.c\
 		   $(SRCS_P)print.c\
 		   $(SRCS_P)close.c
@@ -37,6 +38,7 @@ COMM_SRCS	:= $(COMM_MSGS_P)trace.c\
 TMP		:= gomoku.o\
 		   title.o\
 		   init.o\
+		   rule_of_three.o\
 		   key.o\
 		   print.o\
 		   close.o
@@ -47,6 +49,7 @@ COMM_TMP	:= trace.o\
 OBJS		:= $(OBJS_P)gomoku.o\
 		   $(OBJS_P)title.o\
 		   $(OBJS_P)init.o\
+		   $(OBJS_P)rule_of_three.o\
 		   $(OBJS_P)key.o\
 		   $(OBJS_P)print.o\
 		   $(OBJS_P)close.o
