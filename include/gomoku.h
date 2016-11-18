@@ -14,6 +14,10 @@
 # include	<ncurses.h>
 # include	"trace.h"
 
+/*
+** Defines
+*/
+
 # define	DEFAULT_VALUE (19)
 # define	MENU_H (150)
 # define	MENU_L (150)
@@ -23,6 +27,9 @@
 # define	TITLE_PATH ("/srcs/div/title")
 # define	DEF_READ (117)
 # define	TABS ("\t\t\t\t\t\t\t")
+
+# define	RULE_OF_TWO (-2)
+# define	RULE_OF_THREE (-3)
 
 # define	RESUME (10)
 # define	NEW_GAME (0)
@@ -41,51 +48,111 @@
 # define	PLAYER_SPOT ('o')
 # define	IA_SPOT ('x')
 
-# define	RULE_OF_TWO (-2)
-# define	RULE_OF_THREE (-3)
-
 # define	DRAW_GAME (11)
 # define	WIN_GAME (42)
 
-typedef struct	s_opt
-{
-  bool		is_verbose;
-}		t_opt;
+/*
+** Enum
+*/
 
-typedef struct	s_gopt
-{
-  unsigned int	state;
-  bool		vs_ia;
-}		t_gopt;
+typedef enum
+  {
+    AUTHORITY,
+    CHECK,
+    SCORE
+  }		arbitrary_type;
+
+/*
+** Structures
+*/
 
 typedef struct	s_menu
 {
-  unsigned int	state;
-  bool		is_title;
+  bool		title_state;
   char		**title;
+  int		state;
 }		t_menu;
+
+typedef struct	s_options
+{
+  bool		vs_ia;
+}		t_options;
+
+typedef struct	s_rules
+{
+  bool		r3;
+}		t_rules;
 
 typedef struct	s_player
 {
   bool		first;
   bool		state;
-  unsigned int	player1_tokens;
-  unsigned int	player2_tokens;
-  unsigned int	player1_capture;
-  unsigned int	player2_capture;
+  int		player1_tokens;
+  int		player2_tokens;
+  int		player1_capture;
+  int		player2_capture;
 }		t_player;
+
+typedef struct	s_case
+{
+  char		cont;
+}		t_case;
 
 typedef struct	s_game
 {
-  unsigned int	state;
-  unsigned int	h;
-  unsigned int	l;
-  unsigned int	cursy;
-  unsigned int	cursx;
-  char		**board;
-  t_player	player;
-  t_gopt	options;
+  int		h;
+  int		l;
+  int		cursy;
+  int		cursx;
+
+  int		state;
   t_menu	menu;
+  t_options	options;
+  t_rules	rules;
+  t_player	player;
+  t_case	**goban;
 }		t_game;
+
+/*
+** Title functions
+*/
+
+int		get_title(t_game *curr);
+void		display_title(t_game *curr, WINDOW *win);
+
+/*
+** Initialization functions
+*/
+
+void		reset_goban(t_game *curr);
+void		new_game(t_game *curr, WINDOW *win);
+void		init_ncurses(WINDOW *win);
+void		init_cursor(t_game *curr);
+void		init_players(t_game *curr);
+void		init_game(t_game *curr);
+int		init_goban(t_game *curr);
+
+/*
+** Print functions
+*/
+
+void		root_menu(t_game *curr, WINDOW *win);
+int		print_menu(t_game *curr, WINDOW *win);
+void		print_goban(t_game *curr, WINDOW *win);
+void		print_infos(t_game *curr, WINDOW *win);
+
+/*
+** Key functions
+*/
+
+void		reset_key(char *key);
+
+/*
+** Close functions
+*/
+
+int		end_game(t_game *curr, WINDOW *win);
+void		free_goban(t_game *curr);
+void		end_ncurses();
 
 #endif		/* _GOMOKU_H_ */

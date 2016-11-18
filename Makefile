@@ -24,17 +24,32 @@ OBJS_P		:= $(SRCS_P)objs/
 
 COMM_OBJS_P	:= $(COMM_SRCS_P)objs/
 
-SRCS		:= $(SRCS_P)gomoku.c
+SRCS		:= $(SRCS_P)gomoku.c\
+		   $(SRCS_P)title.c\
+		   $(SRCS_P)init.c\
+		   $(SRCS_P)key.c\
+		   $(SRCS_P)print.c\
+		   $(SRCS_P)close.c
 
 COMM_SRCS	:= $(COMM_MSGS_P)trace.c\
 		   $(COMM_MSGS_P)usage.c
 
-TMP		:= gomoku.o
+TMP		:= gomoku.o\
+		   title.o\
+		   init.o\
+		   key.o\
+		   print.o\
+		   close.o
 
 COMM_TMP	:= trace.o\
 		   usage.o
 
-OBJS		:= $(OBJS_P)gomoku.o
+OBJS		:= $(OBJS_P)gomoku.o\
+		   $(OBJS_P)title.o\
+		   $(OBJS_P)init.o\
+		   $(OBJS_P)key.o\
+		   $(OBJS_P)print.o\
+		   $(OBJS_P)close.o
 
 COMM_OBJS	:= $(COMM_OBJS_P)trace.o\
 		   $(COMM_OBJS_P)usage.o
