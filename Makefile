@@ -28,6 +28,7 @@ SRCS		:= $(SRCS_P)gomoku.c\
 		   $(SRCS_P)title.c\
 		   $(SRCS_P)init.c\
 		   $(SRCS_P)rule_of_three.c\
+		   $(SRCS_P)rule_of_two.c\
 		   $(SRCS_P)key.c\
 		   $(SRCS_P)print.c\
 		   $(SRCS_P)close.c
@@ -39,6 +40,7 @@ TMP		:= gomoku.o\
 		   title.o\
 		   init.o\
 		   rule_of_three.o\
+		   rule_of_two.o\
 		   key.o\
 		   print.o\
 		   close.o
@@ -50,6 +52,7 @@ OBJS		:= $(OBJS_P)gomoku.o\
 		   $(OBJS_P)title.o\
 		   $(OBJS_P)init.o\
 		   $(OBJS_P)rule_of_three.o\
+		   $(OBJS_P)rule_of_two.o\
 		   $(OBJS_P)key.o\
 		   $(OBJS_P)print.o\
 		   $(OBJS_P)close.o

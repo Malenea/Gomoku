@@ -96,7 +96,7 @@ int		authorize_check_d1(t_game *curr)
 	   && curr->goban[curr->cursy - 1][curr->cursx - 1].cont == (curr->player.state == true ? 'o' : 'x')
 	   && curr->goban[curr->cursy + 1][curr->cursx + 1].cont == (curr->player.state == true ? 'o' : 'x'))
     {
-      if (curr->cursy < curr->h && curr->cursx < curr->l - 1 && curr->goban[curr->cursy + 2][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o'))
+      if (curr->cursy < curr->h - 1 && curr->cursx < curr->l - 1 && curr->goban[curr->cursy + 2][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o'))
 	return (0);
       if (curr->cursy > 1 && curr->cursx > 1 && curr->goban[curr->cursy - 2][curr->cursx - 2].cont == (curr->player.state == true ? 'x' : 'o'))
 	return (0);
@@ -107,17 +107,17 @@ int		authorize_check_d1(t_game *curr)
 
 int		authorize_check_d2(t_game *curr)
 {
-  if (curr->cursy < curr->h - 1 && curr->cursx > 1
+  if (curr->cursy < curr->h - 1  && curr->cursx > 1
       && curr->goban[curr->cursy + 1][curr->cursx - 1].cont == (curr->player.state == true ? 'o' : 'x')
       && curr->goban[curr->cursy + 2][curr->cursx - 2].cont == (curr->player.state == true ? 'o' : 'x'))
     {
-      if (curr-> cursy < curr->h - 2 && curr->cursx > 2 && curr->goban[curr->cursy + 3][curr->cursx - 3].cont == (curr->player.state == true ? 'x' : 'o'))
+      if (curr->cursy < curr->h - 2 && curr->cursx > 2 && curr->goban[curr->cursy + 3][curr->cursx - 3].cont == (curr->player.state == true ? 'x' : 'o'))
 	return (0);
       if (curr->cursy > 0 && curr->cursx < curr->l && curr->goban[curr->cursy - 1][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o'))
 	return (0);
       return (1);
     }
-  else if (curr->cursy > 1 && curr->cursx < curr->l - 1
+    else if (curr->cursy > 1 && curr->cursx < curr->l - 1
 	   && curr->goban[curr->cursy - 1][curr->cursx + 1].cont == (curr->player.state == true ? 'o' : 'x')
 	   && curr->goban[curr->cursy - 2][curr->cursx + 2].cont == (curr->player.state == true ? 'o' : 'x'))
     {
@@ -127,7 +127,7 @@ int		authorize_check_d2(t_game *curr)
 	return (0);
       return (1);
     }
-  else if (curr->cursy > 0 && curr->cursx > 0 && curr->cursy < curr->h && curr->cursx < curr->l
+  else if (curr->cursy > 0 && curr->cursx > 0 && curr->cursy  < curr->h && curr->cursx < curr->l
 	   && curr->goban[curr->cursy - 1][curr->cursx + 1].cont == (curr->player.state == true ? 'o' : 'x')
 	   && curr->goban[curr->cursy + 1][curr->cursx - 1].cont == (curr->player.state == true ? 'o' : 'x'))
     {

@@ -1,119 +1,27 @@
 #include	"gomoku.h"
 
-int		capture_two(t_game *curr)
+void		game_results(WINDOW *win, int is)
 {
-  if (curr->cursx + 2 < curr->l)
-    {
-      if (curr->goban[curr->cursy][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy][curr->cursx + 3].cont == (curr->player.state == true ? 'o' : 'x'))
-	{
-	  curr->goban[curr->cursy][curr->cursx + 1].cont = '-';
-	  curr->goban[curr->cursy][curr->cursx + 2].cont = '-';
-	  if (curr->player.state == true)
-	    curr->player.player1_capture += 2;
-	  else
-	    curr->player.player2_capture += 2;
-	}
-    }
-  if (curr->cursx > 2)
-    {
-      if (curr->goban[curr->cursy][curr->cursx - 1].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy][curr->cursx - 2].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy][curr->cursx - 3].cont == (curr->player.state == true ? 'o' : 'x'))
-	{
-	  curr->goban[curr->cursy][curr->cursx - 1].cont = '-';
-	  curr->goban[curr->cursy][curr->cursx - 2].cont = '-';
-	  if (curr->player.state == true)
-	    curr->player.player1_capture += 2;
-	  else
-	    curr->player.player2_capture += 2;
-	}
-    }
-  if (curr->cursy + 2 < curr->h)
-    {
-      if (curr->goban[curr->cursy + 1][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy + 2][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy + 3][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x'))
-	{
-	  curr->goban[curr->cursy + 1][curr->cursx].cont = '-';
-	  curr->goban[curr->cursy + 2][curr->cursx].cont = '-';
-	  if (curr->player.state == true)
-	    curr->player.player1_capture += 2;
-	  else
-	    curr->player.player2_capture += 2;
-	}
-    }
-  if (curr->cursy > 2)
-    {
-      if (curr->goban[curr->cursy - 1][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy - 2][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy - 3][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x'))
-	{
-	  curr->goban[curr->cursy - 1][curr->cursx].cont = '-';
-	  curr->goban[curr->cursy - 2][curr->cursx].cont = '-';
-	  if (curr->player.state == true)
-	    curr->player.player1_capture += 2;
-	  else
-	    curr->player.player2_capture += 2;
-	}
-    }
-  if (curr->cursy + 2 < curr->h && curr->cursx + 2 < curr->l)
-    {
-      if (curr->goban[curr->cursy + 1][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy + 2][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy + 3][curr->cursx + 3].cont == (curr->player.state == true ? 'o' : 'x'))
-	{
-	  curr->goban[curr->cursy + 1][curr->cursx + 1].cont = '-';
-	  curr->goban[curr->cursy + 2][curr->cursx + 2].cont = '-';
-	  if (curr->player.state == true)
-	    curr->player.player1_capture += 2;
-	  else
-	    curr->player.player2_capture += 2;
-	}
-    }
-  if (curr->cursy > 2 && curr->cursx > 2)
-    {
-      if (curr->goban[curr->cursy - 1][curr->cursx - 1].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy - 2][curr->cursx - 2].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy - 3][curr->cursx - 3].cont == (curr->player.state == true ? 'o' : 'x'))
-	{
-	  curr->goban[curr->cursy - 1][curr->cursx - 1].cont = '-';
-	  curr->goban[curr->cursy - 2][curr->cursx - 2].cont = '-';
-	  if (curr->player.state == true)
-	    curr->player.player1_capture += 2;
-	  else
-	    curr->player.player2_capture += 2;
-	}
-    }
-  if (curr->cursy + 2 < curr->h && curr->cursx > 2)
-    {
-      if (curr->goban[curr->cursy + 1][curr->cursx - 1].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy + 2][curr->cursx - 2].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy + 3][curr->cursx - 3].cont == (curr->player.state == true ? 'o' : 'x'))
-	{
-	  curr->goban[curr->cursy + 1][curr->cursx - 1].cont = '-';
-	  curr->goban[curr->cursy + 2][curr->cursx - 2].cont = '-';
-	  if (curr->player.state == true)
-	    curr->player.player1_capture += 2;
-	  else
-	    curr->player.player2_capture += 2;
-	}
-    }
-  if (curr->cursy > 2 && curr->cursx + 2 < curr->l)
-    {
-      if (curr->goban[curr->cursy - 1][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy - 2][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o')
-	  && curr->goban[curr->cursy - 3][curr->cursx + 3].cont == (curr->player.state == true ? 'o' : 'x'))
-	{
-	  curr->goban[curr->cursy - 1][curr->cursx + 1].cont = '-';
-	  curr->goban[curr->cursy - 2][curr->cursx + 2].cont = '-';
-	  if (curr->player.state == true)
-	    curr->player.player1_capture += 2;
-	  else
-	    curr->player.player2_capture += 2;
-	}
-    }
+  wresize(win, MENU_H, MENU_L);
+  wclear(win);
+  if (is == 0)
+    wprintw(win, "%sNone of the players won the game.\n%sIt's a draw.", TABS, TABS);
+  else if (is == 1)
+    wprintw(win, "%sPlayer 1 won the game.\n%sAll hail Player 1.", TABS, TABS);
+  else
+    wprintw(win, "%sPlayer 2 won the game.\n%sAll hail Player 2.", TABS, TABS);
+  wrefresh(win);
+  wgetch(win);
+}
+
+int		score_arbitrary(t_game *curr)
+{
+  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture)
+      >= 10)
+    return (WIN_GAME);
+  if ((curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens)
+      == 0)
+    return (DRAW_GAME);
   return (0);
 }
 
@@ -135,6 +43,8 @@ int		arbitrary(arbitrary_type is, t_game *curr)
     }
   else
     {
+      ret = score_arbitrary(curr);
+      return (ret);
     }
   return (ret);
 }
@@ -164,7 +74,6 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	      curr->player.player1_tokens -= 1;
 	    }
 	  arbitrary(CHECK, curr);
-	  /*
 	  ret = arbitrary(SCORE, curr);
 	  if (ret == WIN_GAME)
 	    {
@@ -178,12 +87,11 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	    {
 	      game_results(win, 0);
 	      curr->state = 0;
-	      ret = display_menu(curr, win);
+	      ret = prompt_menu(curr, win);
 	      if (ret == END_GAME)
 		return (END_GAME);
 	    }
 	  else
-	    */
 	    curr->player.state = (curr->player.state == true ? false : true);
 	  wclear(win);
 	  print_goban(curr, win);

@@ -139,6 +139,7 @@ int		init_goban(t_game *curr);
 */
 
 int		authorize_rule_of_three(t_game *curr);
+int		capture_two(t_game *curr);
 
 /*
 ** Print functions

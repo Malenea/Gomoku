@@ -8,9 +8,9 @@ int		get_title(t_game *curr)
   char		buffer[DEF_READ];
   unsigned int	h = 0;
 
-  curr->menu.title = malloc(sizeof(char *) * TITLE_H);
+  curr->menu.title = malloc(sizeof(char *) * (TITLE_H + 1));
   curr->menu.title[TITLE_H] = NULL;
-  title_path = malloc(sizeof(char) * (strlen(path) + strlen(TITLE_PATH)));
+  title_path = malloc(sizeof(char) * (strlen(path) + strlen(TITLE_PATH) + 1));
   strcpy(title_path, path);
   strcat(title_path, TITLE_PATH);
   if ((fd = open(title_path, O_RDONLY)) < 0)
