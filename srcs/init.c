@@ -54,6 +54,7 @@ void		init_game(t_game *curr)
 {
   curr->state = 0;
   curr->rules.r3 = true;
+  curr->rules.c2 = true;
   curr->h = DEFAULT_VALUE;
   curr->l = DEFAULT_VALUE;
   init_cursor(curr);

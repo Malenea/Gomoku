@@ -1,53 +1,121 @@
 #include	"gomoku.h"
 
-/*
-int		authorize_rule_of_two(t_game *curr)
+int		capture_two(t_game *curr)
 {
-  int		ret = 1;
-
-  if (curr->cursx + 2 < curr->h && curr->cursx > 1)
-    if (curr->goban[curr->cursy][curr->cursx + 1].cont == (curr->player.state == true ? 'o' : 'x')
-	&& curr->goban[curr->cursy][curr->cursx + 2].cont == (curr->player.state == true? 'x' : 'o')
-	&& curr->goban[curr->cursy][curr->cursx - 1].cont == (curr->player.state == true ? 'x' : 'o'))
-      ret = RULE_OF_TWO;
-  if (curr->cursx + 1 < curr->h && curr->cursx > 2)
-    if (curr->goban[curr->cursy][curr->cursx - 1].cont == (curr->player.state == true ? 'o' : 'x')
-	&& curr->goban[curr->cursy][curr->cursx - 2].cont == (curr->player.state == true? 'x' : 'o')
-	&& curr->goban[curr->cursy][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o'))
-      ret = RULE_OF_TWO;
-  if (curr->cursy + 2 < curr->l && curr->cursy > 1)
-    if (curr->goban[curr->cursy + 1][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x')
-	&& curr->goban[curr->cursy + 2][curr->cursx].cont == (curr->player.state == true? 'x' : 'o')
-	&& curr->goban[curr->cursy - 1][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o'))
-      ret = RULE_OF_TWO;
-  if (curr->cursy + 1 < curr->l && curr->cursy > 2)
-    if (curr->goban[curr->cursy - 1][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x')
-	&& curr->goban[curr->cursy - 2][curr->cursx].cont == (curr->player.state == true? 'x' : 'o')
-	&& curr->goban[curr->cursy + 1][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o'))
-      ret = RULE_OF_TWO;
-  if (curr->cursy + 2 < curr->h && curr->cursx + 2 < curr->l && curr->cursy > 1 && curr->cursx > 1)
-    if (curr->goban[curr->cursy - 1][curr->cursx - 1].cont == (curr->player.state == true ? 'x' : 'o')
-	&& curr->goban[curr->cursy + 1][curr->cursx + 1].cont == (curr->player.state == true ? 'o' : 'x')
-	&& curr->goban[curr->cursy + 2][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o'))
-      ret = RULE_OF_TWO;
-  if (curr->cursy > 2 && curr->cursx + 2 < curr->l && curr->cursy + 1 < curr->h && curr->cursx > 1)
-    if (curr->goban[curr->cursy - 1][curr->cursx - 1].cont == (curr->player.state == true ? 'x' : 'o')
-	&& curr->goban[curr->cursy + 1][curr->cursx + 1].cont == (curr->player.state == true ? 'o' : 'x')
-	&& curr->goban[curr->cursy + 2][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o'))
-      ret = RULE_OF_TWO;
-  if (curr->cursy + 1 < curr->h && curr->cursx + 1 < curr->l && curr->cursy > 2 && curr->cursx > 2)
-    if (curr->goban[curr->cursy + 1][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o')
-	&& curr->goban[curr->cursy - 1][curr->cursx - 1].cont == (curr->player.state == true ? 'o' : 'x')
-	&& curr->goban[curr->cursy - 2][curr->cursx - 2].cont == (curr->player.state == true ? 'x' : 'o'))
-      ret = RULE_OF_TWO;
-  if (curr->cursy > 1 && curr->cursx + 1 < curr->l && curr->cursy + 2 < curr->h && curr->cursx > 2)
-    if (curr->goban[curr->cursy - 1][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o')
-	&& curr->goban[curr->cursy + 1][curr->cursx - 1].cont == (curr->player.state == true ? 'o' : 'x')
-	&& curr->goban[curr->cursy + 2][curr->cursx - 2].cont == (curr->player.state == true ? 'x' : 'o'))
-      ret = RULE_OF_TWO;
-  return (ret);
+  if (curr->cursx + 2 < curr->l)
+    {
+      if (curr->goban[curr->cursy][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy][curr->cursx + 3].cont == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->goban[curr->cursy][curr->cursx + 1].cont = '-';
+	  curr->goban[curr->cursy][curr->cursx + 2].cont = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursx > 2)
+    {
+      if (curr->goban[curr->cursy][curr->cursx - 1].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy][curr->cursx - 2].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy][curr->cursx - 3].cont == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->goban[curr->cursy][curr->cursx - 1].cont = '-';
+	  curr->goban[curr->cursy][curr->cursx - 2].cont = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy + 2 < curr->h)
+    {
+      if (curr->goban[curr->cursy + 1][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy + 2][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy + 3][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->goban[curr->cursy + 1][curr->cursx].cont = '-';
+	  curr->goban[curr->cursy + 2][curr->cursx].cont = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy > 2)
+    {
+      if (curr->goban[curr->cursy - 1][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy - 2][curr->cursx].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy - 3][curr->cursx].cont == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->goban[curr->cursy - 1][curr->cursx].cont = '-';
+	  curr->goban[curr->cursy - 2][curr->cursx].cont = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy + 2 < curr->h && curr->cursx + 2 < curr->l)
+    {
+      if (curr->goban[curr->cursy + 1][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy + 2][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy + 3][curr->cursx + 3].cont == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->goban[curr->cursy + 1][curr->cursx + 1].cont = '-';
+	  curr->goban[curr->cursy + 2][curr->cursx + 2].cont = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy > 2 && curr->cursx > 2)
+    {
+      if (curr->goban[curr->cursy - 1][curr->cursx - 1].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy - 2][curr->cursx - 2].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy - 3][curr->cursx - 3].cont == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->goban[curr->cursy - 1][curr->cursx - 1].cont = '-';
+	  curr->goban[curr->cursy - 2][curr->cursx - 2].cont = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy + 2 < curr->h && curr->cursx > 2)
+    {
+      if (curr->goban[curr->cursy + 1][curr->cursx - 1].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy + 2][curr->cursx - 2].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy + 3][curr->cursx - 3].cont == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->goban[curr->cursy + 1][curr->cursx - 1].cont = '-';
+	  curr->goban[curr->cursy + 2][curr->cursx - 2].cont = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  if (curr->cursy > 2 && curr->cursx + 2 < curr->l)
+    {
+      if (curr->goban[curr->cursy - 1][curr->cursx + 1].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy - 2][curr->cursx + 2].cont == (curr->player.state == true ? 'x' : 'o')
+	  && curr->goban[curr->cursy - 3][curr->cursx + 3].cont == (curr->player.state == true ? 'o' : 'x'))
+	{
+	  curr->goban[curr->cursy - 1][curr->cursx + 1].cont = '-';
+	  curr->goban[curr->cursy - 2][curr->cursx + 2].cont = '-';
+	  if (curr->player.state == true)
+	    curr->player.player1_capture += 2;
+	  else
+	    curr->player.player2_capture += 2;
+	}
+    }
+  return (0);
 }
-*/
 
 int		arbitrary(arbitrary_type is, t_game *curr)
 {
@@ -61,6 +129,9 @@ int		arbitrary(arbitrary_type is, t_game *curr)
     }
   else if (is == CHECK)
     {
+      if (curr->rules.c2 == true)
+	ret = capture_two(curr);
+      return (ret);
     }
   else
     {
@@ -92,31 +163,23 @@ int		player_cmds(t_game *curr, WINDOW *win)
 	      curr->goban[curr->cursy][curr->cursx].cont = 'o';
 	      curr->player.player1_tokens -= 1;
 	    }
-	  /*
 	  arbitrary(CHECK, curr);
-	  if (arbitrary(SCORE, curr) == WIN_GAME)
+	  /*
+	  ret = arbitrary(SCORE, curr);
+	  if (ret == WIN_GAME)
 	    {
 	      game_results(win, (curr->player.state == true ? 1 : 2));
 	      curr->state = 0;
-	      ret = display_menu(curr, win);
-	      if (ret == NEW_GAME)
-		{
-new_game(curr);
-		}
-	      else if (ret == END_GAME)
+	      ret = prompt_menu(curr, win);
+	      if (ret == END_GAME)
 		return (END_GAME);
 	    }
-	  ret = check_tokens(curr);
-	  if (ret == DRAW_GAME)
+	  else if (ret == DRAW_GAME)
 	    {
 	      game_results(win, 0);
 	      curr->state = 0;
 	      ret = display_menu(curr, win);
-	      if (ret == NEW_GAME)
-		{
-new_game(curr);
-		}
-	      else if (ret == END_GAME)
+	      if (ret == END_GAME)
 		return (END_GAME);
 	    }
 	  else
@@ -140,10 +203,8 @@ new_game(curr);
 	    curr->cursx = (curr->cursx == 0 ? curr->l - 1 : curr->cursx - 1);
 	  else if (ch_sum == ESC_KEY)
 	    {
-	      ret = print_menu(curr, win);
-	      if (ret == NEW_GAME)
-		new_game(curr, win);
-	      else if (ret == END_GAME)
+	      ret = prompt_menu(curr, win);
+	      if (ret == END_GAME)
 		return (END_GAME);
 	    }
 	  wclear(win);
@@ -184,7 +245,6 @@ int		game_loop(t_game *curr, WINDOW *win)
   print_goban(curr, win);
   print_infos(curr, win);
   wrefresh(win);
-  wgetch(win);
   curr->state = 1;
   while (1)
     {
@@ -209,7 +269,7 @@ int		main(int ac, char **av)
 {
   WINDOW	*win;
   t_game	curr;
-  int		ret;
+  int		ret = 0;
 
   init_game(&curr);
   ret = init_goban(&curr);
@@ -219,7 +279,7 @@ int		main(int ac, char **av)
   win = newwin(MENU_H, MENU_L, 1, 1);
   refresh();
 
-  ret = print_menu(&curr, win);
+  ret = prompt_menu(&curr, win);
   if (ret == END_GAME)
     return (end_game(&curr, win));
   game_loop(&curr, win);

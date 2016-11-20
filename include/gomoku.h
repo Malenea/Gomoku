@@ -32,9 +32,9 @@
 # define	RULE_OF_THREE (-3)
 
 # define	RESUME (10)
-# define	NEW_GAME (0)
-# define	OPTIONS (1)
-# define	OPTIONS_NB (2)
+# define	NEW_GAME (1)
+# define	OPTIONS (2)
+# define	OPTIONS_NB (4)
 # define	END_GAME (42)
 
 # define	SPACE_KEY (32)
@@ -76,10 +76,12 @@ typedef struct	s_menu
 typedef struct	s_options
 {
   bool		vs_ia;
+  int		state;
 }		t_options;
 
 typedef struct	s_rules
 {
+  bool		c2;
   bool		r3;
 }		t_rules;
 
@@ -143,9 +145,12 @@ int		authorize_rule_of_three(t_game *curr);
 */
 
 void		root_menu(t_game *curr, WINDOW *win);
+void		print_options(t_game *curr, WINDOW *win);
 int		print_menu(t_game *curr, WINDOW *win);
 void		print_goban(t_game *curr, WINDOW *win);
 void		print_infos(t_game *curr, WINDOW *win);
+void		prompt_options(t_game *curr, WINDOW *win);
+int		prompt_menu(t_game *curr, WINDOW *win);
 
 /*
 ** Key functions
