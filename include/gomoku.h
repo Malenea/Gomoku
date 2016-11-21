@@ -135,6 +135,21 @@ void		init_game(t_game *curr);
 int		init_goban(t_game *curr);
 
 /*
+** Cmds functions
+*/
+
+int		player_cmds(t_game *curr, WINDOW *win);
+void		ia_cmds(t_game *curr, WINDOW *win);
+
+/*
+** Arbitrary functions
+*/
+
+void		game_results(WINDOW *win, int is);
+int		score_arbitrary(t_game *curr);
+int		arbitrary(arbitrary_type is, t_game *curr);
+
+/*
 ** Rules functions
 */
 

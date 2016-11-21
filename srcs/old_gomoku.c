@@ -1,6 +1,5 @@
 #include	"gomoku.h"
 
-/*
 int		authorize_rule_of_two(t_game *curr)
 {
   int		ret = 1;
@@ -47,7 +46,6 @@ int		authorize_rule_of_two(t_game *curr)
       ret = RULE_OF_TWO;
   return (ret);
 }
-*/
 
 void		end_board(t_game *curr)
 {
