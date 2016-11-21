@@ -42,7 +42,13 @@ void		init_players(t_game *curr)
   curr->player.player2_tokens = 60;
   curr->player.player1_capture = 0;
   curr->player.player2_capture = 0;
-  curr->player.state = (curr->player.first == true ? false : true);
+  curr->player.state = (curr->player.first == true ? true : false);
+  curr->player.p1_w5_cond = false;
+  curr->player.p2_w5_cond = false;
+  curr->player.player1_y_win = -1;
+  curr->player.player1_x_win = -1;
+  curr->player.player2_y_win = -1;
+  curr->player.player2_x_win = -1;
 }
 
 void		init_options(t_game *curr)
@@ -53,12 +59,13 @@ void		init_options(t_game *curr)
 void		init_game(t_game *curr)
 {
   curr->state = 0;
-  curr->rules.r3 = true;
   curr->rules.c2 = true;
+  curr->rules.r3 = true;
+  curr->rules.w5 = true;
   curr->h = DEFAULT_VALUE;
   curr->l = DEFAULT_VALUE;
   init_cursor(curr);
-  curr->player.first == true;
+  curr->player.first = true;
   init_players(curr);
   init_options(curr);
   get_title(curr);

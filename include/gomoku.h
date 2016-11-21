@@ -34,7 +34,7 @@
 # define	RESUME (10)
 # define	NEW_GAME (1)
 # define	OPTIONS (2)
-# define	OPTIONS_NB (4)
+# define	OPTIONS_NB (5)
 # define	END_GAME (42)
 
 # define	SPACE_KEY (32)
@@ -83,6 +83,7 @@ typedef struct	s_rules
 {
   bool		c2;
   bool		r3;
+  bool		w5;
 }		t_rules;
 
 typedef struct	s_player
@@ -93,6 +94,13 @@ typedef struct	s_player
   int		player2_tokens;
   int		player1_capture;
   int		player2_capture;
+  //Win options for 5 with c2 possible
+  bool		p1_w5_cond;
+  int		player1_y_win;
+  int		player1_x_win;
+  bool		p2_w5_cond;
+  int		player2_y_win;
+  int		player2_x_win;
 }		t_player;
 
 typedef struct	s_case

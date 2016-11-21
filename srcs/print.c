@@ -49,14 +49,14 @@ void		print_options(t_game *curr, WINDOW *win)
       wattron(win, COLOR_PAIR(1));
       wprintw(win, "Playing against IA:");
       wattroff(win, COLOR_PAIR(1));
-      wprintw(win, "\t");
+      wprintw(win, "\t\t");
       wattron(win, COLOR_PAIR(curr->options.vs_ia == true ? 1 : 2));
       wprintw(win, "%s\n", curr->options.vs_ia == true ? "ON" : "OFF");
       wattroff(win, COLOR_PAIR(curr->options.vs_ia == true ? 1 : 2));
     }
   else
     {
-      wprintw(win, "%s Playing against IA:\t", TABS);
+      wprintw(win, "%s Playing against IA:\t\t", TABS);
       wattron(win, COLOR_PAIR(curr->options.vs_ia == true ? 1 : 2));
       wprintw(win, "%s\n", curr->options.vs_ia == true ? "ON" : "OFF");
       wattroff(win, COLOR_PAIR(curr->options.vs_ia == true ? 1 : 2));
@@ -67,14 +67,14 @@ void		print_options(t_game *curr, WINDOW *win)
       wattron(win, COLOR_PAIR(1));
       wprintw(win, "Player starting:");
       wattroff(win, COLOR_PAIR(1));
-      wprintw(win, "\t");
+      wprintw(win, "\t\t");
       wattron(win, COLOR_PAIR(curr->player.first == true ? 1 : 2));
       wprintw(win, "%s\n", curr->player.first == true ? "Player 1" : "Player 2/IA");
       wattroff(win, COLOR_PAIR(curr->player.first == true ? 1 : 2));
     }
   else
     {
-      wprintw(win, "%s Player starting:\t", TABS);
+      wprintw(win, "%s Player starting:\t\t", TABS);
       wattron(win, COLOR_PAIR(curr->player.first == true ? 1 : 2));
       wprintw(win, "%s\n", curr->player.first == true ? "Player 1" : "Player 2/IA");
       wattroff(win, COLOR_PAIR(curr->player.first == true ? 1 : 2));
@@ -84,37 +84,55 @@ void		print_options(t_game *curr, WINDOW *win)
     {
       wprintw(win, "%s ", TABS);
       wattron(win, COLOR_PAIR(1));
-      wprintw(win, "Enable rule of three:");
+      wprintw(win, "Enable capture of two:");
       wattroff(win, COLOR_PAIR(1));
-      wprintw(win, "\t");
-      wattron(win, COLOR_PAIR(curr->rules.r3 == true ? 1 : 2));
-      wprintw(win, "%s\n", curr->rules.r3 == true ? "Yes" : "No");
-      wattroff(win, COLOR_PAIR(curr->rules.r3 == true ? 1 : 2));
+      wprintw(win, "\t\t");
+      wattron(win, COLOR_PAIR(curr->rules.c2 == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->rules.c2 == true ? "Yes" : "No");
+      wattroff(win, COLOR_PAIR(curr->rules.c2 == true ? 1 : 2));
     }
   else
     {
-      wprintw(win, "%s Enable rule of three:\t", TABS);
-      wattron(win, COLOR_PAIR(curr->rules.r3 == true ? 1 : 2));
-      wprintw(win, "%s\n", curr->rules.r3 == true ? "Yes" : "No");
-      wattroff(win, COLOR_PAIR(curr->rules.r3 == true ? 1 : 2));
+      wprintw(win, "%s Enable capture of two:\t\t", TABS);
+      wattron(win, COLOR_PAIR(curr->rules.c2 == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->rules.c2 == true ? "Yes" : "No");
+      wattroff(win, COLOR_PAIR(curr->rules.c2 == true ? 1 : 2));
     }
   if (curr->options.state == 3)
     {
       wprintw(win, "%s ", TABS);
       wattron(win, COLOR_PAIR(1));
-      wprintw(win, "Enable capture of two:");
+      wprintw(win, "Enable rule of three:");
       wattroff(win, COLOR_PAIR(1));
-      wprintw(win, "\t");
-      wattron(win, COLOR_PAIR(curr->rules.c2 == true ? 1 : 2));
-      wprintw(win, "%s\n", curr->rules.c2 == true ? "Yes" : "No");
-      wattroff(win, COLOR_PAIR(curr->rules.c2 == true ? 1 : 2));
+      wprintw(win, "\t\t");
+      wattron(win, COLOR_PAIR(curr->rules.r3 == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->rules.r3 == true ? "Yes" : "No");
+      wattroff(win, COLOR_PAIR(curr->rules.r3 == true ? 1 : 2));
     }
   else
     {
-      wprintw(win, "%s Enable capture of two:\t", TABS);
-      wattron(win, COLOR_PAIR(curr->rules.c2 == true ? 1 : 2));
-      wprintw(win, "%s\n", curr->rules.c2 == true ? "Yes" : "No");
-      wattroff(win, COLOR_PAIR(curr->rules.c2 == true ? 1 : 2));
+      wprintw(win, "%s Enable rule of three:\t\t", TABS);
+      wattron(win, COLOR_PAIR(curr->rules.r3 == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->rules.r3 == true ? "Yes" : "No");
+      wattroff(win, COLOR_PAIR(curr->rules.r3 == true ? 1 : 2));
+    }
+  if (curr->options.state == 4)
+    {
+      wprintw(win, "%s ", TABS);
+      wattron(win, COLOR_PAIR(1));
+      wprintw(win, "Enable win delay if rule 2:");
+      wattroff(win, COLOR_PAIR(1));
+      wprintw(win, "\t");
+      wattron(win, COLOR_PAIR(curr->rules.w5 == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->rules.w5 == true ? "Yes" : "No");
+      wattroff(win, COLOR_PAIR(curr->rules.w5 == true ? 1 : 2));
+    }
+  else
+    {
+      wprintw(win, "%s Enable win delay if rule 2:\t", TABS);
+      wattron(win, COLOR_PAIR(curr->rules.w5 == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->rules.w5 == true ? "Yes" : "No");
+      wattroff(win, COLOR_PAIR(curr->rules.w5 == true ? 1 : 2));
     }
   wprintw(win, "\n");
   if (curr->options.state == OPTIONS_NB)
@@ -217,10 +235,12 @@ void		prompt_options(t_game *curr, WINDOW *win)
 	  else if (curr->options.state == 1)
 	    curr->player.first = (curr->player.first == true ? false : true);
 	  else if (curr->options.state == 2)
-	    curr->rules.r3 = (curr->rules.r3 == true ? false : true);
-	  else if (curr->options.state == 3)
 	    curr->rules.c2 = (curr->rules.c2 == true ? false : true);
-	  else
+	  else if (curr->options.state == 3)
+	    curr->rules.r3 = (curr->rules.r3 == true ? false : true);
+	  else if (curr->options.state == 4 && curr->rules.c2 == true)
+	    curr->rules.w5 = (curr->rules.w5 == true ? false : true);
+	  else if (curr->options.state == OPTIONS_NB)
 	    {
 	      wclear(win);
 	      wrefresh(win);
