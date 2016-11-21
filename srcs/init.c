@@ -79,5 +79,7 @@ int		init_goban(t_game *curr)
       for (l = 0; l < curr->l; l++)
 	curr->goban[h][l].cont = '-';
     }
+  curr->l -= 1;
+  curr->h -= 1;
   return (0);
 }

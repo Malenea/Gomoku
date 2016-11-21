@@ -20,7 +20,7 @@ int		score_arbitrary(t_game *curr)
       >= 10)
     return (WIN_GAME);
   if ((curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens)
-      == 0)
+      <= 0)
     return (DRAW_GAME);
   return (0);
 }
