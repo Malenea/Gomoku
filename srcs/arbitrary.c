@@ -14,123 +14,105 @@ void		game_results(WINDOW *win, int is)
   wgetch(win);
 }
 
-int		is_exception(t_game *curr, int y, int x)
+int		is_exception(t_game *curr, int y, int x, char is)
 {
+  if (curr->goban[y][x].cont == (curr->player.state == true ? 'o' : 'x'))
+    {
+      if (is == 'h')
+	{
+	  //STATMENTS
+	  if (x > 0 && curr->goban[y][x - 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	    {
+	      if ((x > 1 && curr->goban[y][x - 2].cont == (curr->player.state == true ? 'x' : 'o'))
+		  || (x < curr->l && curr->goban[y][x + 1].cont == (curr->player.state == true ? 'x' : 'o')))
+		return (1);
+	    }
+	  else if (x < curr->l && curr->goban[y][x + 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	    {
+	      if ((x > 0 && curr->goban[y][x - 1].cont == (curr->player.state == true ? 'x' : 'o'))
+		  || (x < curr->l - 1 && curr->goban[y][x + 2].cont == (curr->player.state == true ? 'x' : 'o')))
+		return (1);
+	    }
+	  else if (x > 0 && y > 0 && curr->goban[y - 1][x - 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	    {
+	      if ((x > 1 && y > 1 && curr->goban[y - 2][x - 2].cont == (curr->player.state == true ? 'x' : 'o'))
+		  || (x < curr->l && y < curr->h && curr->goban[y + 1][x + 1].cont == (curr->player.state == true ? 'x' : 'o')))
+		return (1);
+	    }
+	  else if (x < curr->l && y < curr->h && curr->goban[y + 1][x + 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	    {
+	      if ((x > 0 && y > 0 && curr->goban[y - 1][x - 1].cont == (curr->player.state == true ? 'x' : 'o'))
+		  || (x < curr->l - 1 && y < curr->h - 1 && curr->goban[y + 2][x + 2].cont == (curr->player.state == true ? 'x' : 'o')))
+		return (1);
+	    }
+	  else if (x < curr->l && y > 0 && curr->goban[y - 1][x + 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	    {
+	      if ((x > 0 && y < curr->l && curr->goban[y + 1][x - 1].cont == (curr->player.state == true ? 'x' : 'o'))
+		  || (x < curr->l - 1 && y > 1 && curr->goban[y - 2][x + 2].cont == (curr->player.state == true ? 'x' : 'o')))
+		return (1);
+	    }
+	  else if (x < curr->l && y > 0 && curr->goban[y + 1][x - 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	    {
+	      if ((x > 1 && y < curr->l - 1 && curr->goban[y + 2][x - 2].cont == (curr->player.state == true ? 'x' : 'o'))
+		  || (x < curr->l && y > 0 && curr->goban[y - 1][x + 1].cont == (curr->player.state == true ? 'x' : 'o')))
+		return (1);
+	    }
+	  //END_STATMENTS
+	}
+      else if (is == 'l')
+	{
+	}
+    }
   return (0);
 }
 
-int		count_h(t_game *curr)
+int		count_h(t_game *curr, int h, int l, bool state)
 {
-  int		h;
-  int		l;
   int		h_save;
   int		res = 0;
   bool		ex = false;
 
-  h = ((curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true ? curr->player.player1_y_win : curr->cursy);
-  l = ((curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true ? curr->player.player1_x_win : curr->cursx);
-  while (h > 0 && curr->goban[h][l].cont == (curr->player.state == true ? 'o' : 'x'))
+  while (h > 0 && curr->goban[h][l].cont == (state == true ? 'o' : 'x'))
     h -= 1;
-  if (h > 0 && curr->goban[h][l].cont != (curr->player.state == true ? 'o' : 'x'))
+  if (h > 0 && curr->goban[h][l].cont != (state == true ? 'o' : 'x'))
     h += 1;
   h_save = h;
-  while (h < curr->h && curr->goban[h][l].cont == (curr->player.state == true ? 'o' : 'x'))
+  while (h < curr->h && curr->goban[h][l].cont == (state == true ? 'o' : 'x'))
     {
-      ex = (is_exception(curr, h, l) == 0 ? false : true);
+      if (is_exception(curr, h, l, 'h') == 1 && (state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == false)
+	ex = true;
       res += 1;
       h += 1;
     }
-  if (h == curr->h && curr->goban[h][l].cont == (curr->player.state == true ? 'o' : 'x'))
+  if (h == curr->h && curr->goban[h][l].cont == (state == true ? 'o' : 'x'))
     res += 1;
-  if (ex == true && res >= 5 && (curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == false)
+  //conditions
+  if (ex == true && res >= 5)
     {
-      curr->player.player1_y_win = h_save;
-      curr->player.player2_x_win = curr->cursx;
-      if (curr->player.state == true)
+      if (state == true)
+	{
+	  curr->player.player1_y_win = h_save;
+	  curr->player.player1_x_win = curr->cursx;
+	}
+      else
+	{
+	  curr->player.player2_y_win = h_save;
+	  curr->player.player2_x_win = curr->cursx;
+	}
+      if (state == true)
 	curr->player.p1_w5_cond = true;
       else
 	curr->player.p2_w5_cond = true;
       return (0);
     }
-  if (ex == true && res >= 5 && (curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true)
-    {
-      curr->player.player1_y_win = -1;
-      curr->player.player2_x_win = -1;
-      if (curr->player.state == true)
-	curr->player.p1_w5_cond = false;
-      else
-	curr->player.p2_w5_cond = false;
-      return (1);
-    }
-  if (res >= 5 && (curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true)
-    return (0);
   if (res >= 5)
     return (1);
-  if (curr->player.state == true)
-    curr->player.p1_w5_cond = false;
-  else
-    curr->player.p2_w5_cond = false;
-  return (0);
-}
-
-int		count_l(t_game *curr)
-{
-  int		h;
-  int		l;
-  int		l_save;
-  int		res = 0;
-  bool		ex = false;
-
-  h = ((curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true ? curr->player.player1_y_win : curr->cursy);
-  l = ((curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true ? curr->player.player1_x_win : curr->cursx);
-  while (l > 0 && curr->goban[h][l].cont == (curr->player.state == true ? 'o' : 'x'))
-    l -= 1;
-  if (l > 0 && curr->goban[h][l].cont != (curr->player.state == true ? 'o' : 'x'))
-    l += 1;
-  l_save = l;
-  while (l < curr->l && curr->goban[h][l].cont == (curr->player.state == true ? 'o' : 'x'))
-    {
-      ex = (is_exception(curr, h, l) == 0 ? false : true);
-      res += 1;
-      l += 1;
-    }
-  if (l == curr->l && curr->goban[h][l].cont == (curr->player.state == true ? 'o' : 'x'))
-    res += 1;
-  if (ex == true && res >= 5 && (curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == false)
-    {
-      curr->player.player1_y_win = curr->cursy;
-      curr->player.player2_x_win = l_save;
-      if (curr->player.state == true)
-	curr->player.p1_w5_cond = true;
-      else
-	curr->player.p2_w5_cond = true;
-      return (0);
-    }
-  if (ex == true && res >= 5 && (curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true)
-    {
-      curr->player.player1_y_win = -1;
-      curr->player.player2_x_win = -1;
-      if (curr->player.state == true)
-	curr->player.p1_w5_cond = false;
-      else
-	curr->player.p2_w5_cond = false;
-      return (1);
-    }
-  if (res >= 5 && (curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true)
-    return (0);
-  if (res >= 5)
-    return (1);
-  if (curr->player.state == true)
-    curr->player.p1_w5_cond = false;
-  else
-    curr->player.p2_w5_cond = false;
   return (0);
 }
 
 int		count_tokens(t_game *curr)
 {
-  if (count_l(curr) == 1
-      || count_h(curr) == 1)
+  if (count_h(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
     return (WIN_GAME);
   return (0);
 }

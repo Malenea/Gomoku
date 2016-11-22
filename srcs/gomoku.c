@@ -1,5 +1,40 @@
 #include	"gomoku.h"
 
+int		check_cond_w5(t_game *curr, WINDOW *win)
+{
+  int		ret;
+
+  if ((curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true)
+    {
+      if (count_h(curr, (curr->player.state == true ? curr->player.player1_y_win : curr->player.player2_y_win),
+		  (curr->player.state == true ? curr->player.player1_x_win : curr->player.player2_x_win),
+		  (curr->player.state == true ? true : false)) == 1)
+	{
+	  game_results(win, (curr->player.state == true ? 1 : 2));
+	  curr->state = 0;
+	  ret = prompt_menu(curr, win);
+	  if (ret == END_GAME)
+	    return (END_GAME);
+	}
+      else
+	{
+	  if (curr->player.state == true)
+	    {
+	      curr->player.p1_w5_cond = false;
+	      curr->player.player1_y_win = -1;
+	      curr->player.player1_x_win = -1;
+	    }
+	  else
+	    {
+	      curr->player.p2_w5_cond = false;
+	      curr->player.player2_y_win = -1;
+	      curr->player.player2_x_win = -1;
+	    }
+	}
+    }
+  return (0);
+}
+
 int		game_loop(t_game *curr, WINDOW *win)
 {
   int		ret;
@@ -14,6 +49,9 @@ int		game_loop(t_game *curr, WINDOW *win)
       if (curr->options.vs_ia == false
 	  || (curr->options.vs_ia == true && curr->player.state == true))
 	{
+	  ret = check_cond_w5(curr, win);
+	  if (ret == END_GAME)
+	    return (end_game(curr, win));
 	  ret = player_cmds(curr, win);
 	  if (ret == END_GAME)
 	    return (end_game(curr, win));
