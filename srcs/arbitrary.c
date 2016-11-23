@@ -27,31 +27,31 @@ int		is_exception(t_game *curr, int y, int x, char is)
 		  || (x < curr->l && curr->goban[y][x + 1].cont == (curr->player.state == true ? 'x' : 'o')))
 		return (1);
 	    }
-	  else if (x < curr->l && curr->goban[y][x + 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	  if (x < curr->l && curr->goban[y][x + 1].cont == (curr->player.state == true ? 'o' : 'x'))
 	    {
 	      if ((x > 0 && curr->goban[y][x - 1].cont == (curr->player.state == true ? 'x' : 'o'))
 		  || (x < curr->l - 1 && curr->goban[y][x + 2].cont == (curr->player.state == true ? 'x' : 'o')))
 		return (1);
 	    }
-	  else if (x > 0 && y > 0 && curr->goban[y - 1][x - 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	  if (x > 0 && y > 0 && curr->goban[y - 1][x - 1].cont == (curr->player.state == true ? 'o' : 'x'))
 	    {
 	      if ((x > 1 && y > 1 && curr->goban[y - 2][x - 2].cont == (curr->player.state == true ? 'x' : 'o'))
 		  || (x < curr->l && y < curr->h && curr->goban[y + 1][x + 1].cont == (curr->player.state == true ? 'x' : 'o')))
 		return (1);
 	    }
-	  else if (x < curr->l && y < curr->h && curr->goban[y + 1][x + 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	  if (x < curr->l && y < curr->h && curr->goban[y + 1][x + 1].cont == (curr->player.state == true ? 'o' : 'x'))
 	    {
 	      if ((x > 0 && y > 0 && curr->goban[y - 1][x - 1].cont == (curr->player.state == true ? 'x' : 'o'))
 		  || (x < curr->l - 1 && y < curr->h - 1 && curr->goban[y + 2][x + 2].cont == (curr->player.state == true ? 'x' : 'o')))
 		return (1);
 	    }
-	  else if (x < curr->l && y > 0 && curr->goban[y - 1][x + 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	  if (x < curr->l && y > 0 && curr->goban[y - 1][x + 1].cont == (curr->player.state == true ? 'o' : 'x'))
 	    {
 	      if ((x > 0 && y < curr->l && curr->goban[y + 1][x - 1].cont == (curr->player.state == true ? 'x' : 'o'))
 		  || (x < curr->l - 1 && y > 1 && curr->goban[y - 2][x + 2].cont == (curr->player.state == true ? 'x' : 'o')))
 		return (1);
 	    }
-	  else if (x < curr->l && y > 0 && curr->goban[y + 1][x - 1].cont == (curr->player.state == true ? 'o' : 'x'))
+	  if (x < curr->l && y > 0 && curr->goban[y + 1][x - 1].cont == (curr->player.state == true ? 'o' : 'x'))
 	    {
 	      if ((x > 1 && y < curr->l - 1 && curr->goban[y + 2][x - 2].cont == (curr->player.state == true ? 'x' : 'o'))
 		  || (x < curr->l && y > 0 && curr->goban[y - 1][x + 1].cont == (curr->player.state == true ? 'x' : 'o')))
