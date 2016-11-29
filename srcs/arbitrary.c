@@ -173,11 +173,63 @@ int		count_l(t_game *curr, int h, int l, bool state)
   return (0);
 }
 
+int		count_d1(t_game *curr, int h, int l, bool state)
+{
+  int		h_save;
+  int		l_save;
+  int		res = 0;
+  bool		ex = false;
+
+  while (h > 0 && l > 0 && curr->goban[h][l].cont == (state == true ? 'o' : 'x'))
+    {
+      h -= 1;
+      l -= 1;
+    }
+  if ((h > 0 || l > 0) && curr->goban[h][l].cont != (state == true ? 'o' : 'x'))
+    {
+      h += 1;
+      l += 1;
+    }
+  h_save = h;
+  l_save = l;
+  while (h < curr->h && l < curr->l && curr->goban[h][l].cont == (state == true ? 'o' : 'x'))
+    {
+      res += 1;
+      h += 1;
+      l += 1;
+    }
+  if ((h == curr->h || l == curr->l) && curr->goban[h][l].cont == (state == true ? 'o' : 'x'))
+    res += 1;
+  //conditions
+  if (ex == true && res >= 5)
+    {
+      if (state == true)
+	{
+	  curr->player.player1_y_win = h_save;
+	  curr->player.player1_x_win = l_save;
+	}
+      else
+	{
+	  curr->player.player2_y_win = h_save;
+	  curr->player.player2_x_win = l_save;
+	}
+      if (state == true)
+	curr->player.p1_w5_cond = true;
+      else
+	curr->player.p2_w5_cond = true;
+      return (0);
+    }
+  if (res >= 5)
+    return (1);
+}
+
 int		count_tokens(t_game *curr)
 {
   if (count_h(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
     return (WIN_GAME);
   if (count_l(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
+    return (WIN_GAME);
+  if (count_d1(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
     return (WIN_GAME);
   return (0);
 }
