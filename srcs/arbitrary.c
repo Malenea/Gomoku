@@ -229,8 +229,8 @@ int		count_tokens(t_game *curr)
     return (WIN_GAME);
   if (count_l(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
     return (WIN_GAME);
-  if (count_d1(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
-    return (WIN_GAME);
+  /*if (count_d1(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
+    return (WIN_GAME);*/
   return (0);
 }
 
