@@ -27,6 +27,26 @@ int		check_cond_w5(t_game *curr, WINDOW *win)
 	  if (ret == END_GAME)
 	    return (END_GAME);
 	}
+      if (count_d1(curr, (curr->player.state == true ? curr->player.player1_y_win : curr->player.player2_y_win),
+		  (curr->player.state == true ? curr->player.player1_x_win : curr->player.player2_x_win),
+		  (curr->player.state == true ? true : false)) == 1)
+	{
+	  game_results(win, (curr->player.state == true ? 1 : 2));
+	  curr->state = 0;
+	  ret = prompt_menu(curr, win);
+	  if (ret == END_GAME)
+	    return (END_GAME);
+	}
+      if (count_d2(curr, (curr->player.state == true ? curr->player.player1_y_win : curr->player.player2_y_win),
+		  (curr->player.state == true ? curr->player.player1_x_win : curr->player.player2_x_win),
+		  (curr->player.state == true ? true : false)) == 1)
+	{
+	  game_results(win, (curr->player.state == true ? 1 : 2));
+	  curr->state = 0;
+	  ret = prompt_menu(curr, win);
+	  if (ret == END_GAME)
+	    return (END_GAME);
+	}
 
       if (curr->player.state == true)
 	{

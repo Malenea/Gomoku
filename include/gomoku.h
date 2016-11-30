@@ -165,6 +165,7 @@ int		authorize_rule_of_three(t_game *curr);
 int		capture_two(t_game *curr);
 int		count_h(t_game *curr, int h, int l, bool state);
 int		count_l(t_game *curr, int h, int l, bool state);
+int		count_d1(t_game *curr, int h, int l, bool state);
 int		is_exception(t_game *curr, int y, int x, char is);
 
 /*
