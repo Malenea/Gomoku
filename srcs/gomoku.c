@@ -3,6 +3,7 @@
 int		check_cond_w5(t_game *curr, WINDOW *win)
 {
   int		ret;
+  int		ret2 = 0;
 
   if ((curr->player.state == true ? curr->player.p1_w5_cond : curr->player.p2_w5_cond) == true)
     {
@@ -16,20 +17,28 @@ int		check_cond_w5(t_game *curr, WINDOW *win)
 	  if (ret == END_GAME)
 	    return (END_GAME);
 	}
+      if (count_l(curr, (curr->player.state == true ? curr->player.player1_y_win : curr->player.player2_y_win),
+		  (curr->player.state == true ? curr->player.player1_x_win : curr->player.player2_x_win),
+		  (curr->player.state == true ? true : false)) == 1)
+	{
+	  game_results(win, (curr->player.state == true ? 1 : 2));
+	  curr->state = 0;
+	  ret = prompt_menu(curr, win);
+	  if (ret == END_GAME)
+	    return (END_GAME);
+	}
+
+      if (curr->player.state == true)
+	{
+	  curr->player.p1_w5_cond = false;
+	  curr->player.player1_y_win = -1;
+	  curr->player.player1_x_win = -1;
+	}
       else
 	{
-	  if (curr->player.state == true)
-	    {
-	      curr->player.p1_w5_cond = false;
-	      curr->player.player1_y_win = -1;
-	      curr->player.player1_x_win = -1;
-	    }
-	  else
-	    {
-	      curr->player.p2_w5_cond = false;
-	      curr->player.player2_y_win = -1;
-	      curr->player.player2_x_win = -1;
-	    }
+	  curr->player.p2_w5_cond = false;
+	  curr->player.player2_y_win = -1;
+	  curr->player.player2_x_win = -1;
 	}
     }
   return (0);
