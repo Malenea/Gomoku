@@ -34,7 +34,7 @@
 # define	RESUME (10)
 # define	NEW_GAME (1)
 # define	OPTIONS (2)
-# define	OPTIONS_NB (5)
+# define	OPTIONS_NB (6)
 # define	END_GAME (42)
 
 # define	SPACE_KEY (32)
@@ -50,6 +50,11 @@
 
 # define	DRAW_GAME (11)
 # define	WIN_GAME (42)
+
+# define	NO_PRIO (1)
+# define	PRIO_LOSE (2)
+# define	PRIO_DENY (3)
+# define	PRIO_WIN (4)
 
 /*
 ** Enum
@@ -88,6 +93,7 @@ typedef struct	s_rules
 
 typedef struct	s_player
 {
+  bool		help;
   bool		first;
   bool		state;
   int		player1_tokens;
@@ -106,6 +112,7 @@ typedef struct	s_player
 typedef struct	s_case
 {
   char		cont;
+  int		prio;
 }		t_case;
 
 typedef struct	s_game
@@ -114,6 +121,8 @@ typedef struct	s_game
   int		l;
   int		cursy;
   int		cursx;
+  int		y_calc;
+  int		x_calc;
 
   int		state;
   t_menu	menu;
@@ -166,6 +175,7 @@ int		capture_two(t_game *curr);
 int		count_h(t_game *curr, int h, int l, bool state);
 int		count_l(t_game *curr, int h, int l, bool state);
 int		count_d1(t_game *curr, int h, int l, bool state);
+int		count_d2(t_game *curr, int h, int l, bool state);
 int		is_exception(t_game *curr, int y, int x, char is);
 
 /*
@@ -175,6 +185,7 @@ int		is_exception(t_game *curr, int y, int x, char is);
 void		root_menu(t_game *curr, WINDOW *win);
 void		print_options(t_game *curr, WINDOW *win);
 int		print_menu(t_game *curr, WINDOW *win);
+void		update_goban(t_game *curr);
 void		print_goban(t_game *curr, WINDOW *win);
 void		print_infos(t_game *curr, WINDOW *win);
 void		prompt_options(t_game *curr, WINDOW *win);

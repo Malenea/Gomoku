@@ -28,8 +28,8 @@ int		check_cond_w5(t_game *curr, WINDOW *win)
 	    return (END_GAME);
 	}
       if (count_d1(curr, (curr->player.state == true ? curr->player.player1_y_win : curr->player.player2_y_win),
-		  (curr->player.state == true ? curr->player.player1_x_win : curr->player.player2_x_win),
-		  (curr->player.state == true ? true : false)) == 1)
+		   (curr->player.state == true ? curr->player.player1_x_win : curr->player.player2_x_win),
+		   (curr->player.state == true ? true : false)) == 1)
 	{
 	  game_results(win, (curr->player.state == true ? 1 : 2));
 	  curr->state = 0;
@@ -38,8 +38,8 @@ int		check_cond_w5(t_game *curr, WINDOW *win)
 	    return (END_GAME);
 	}
       if (count_d2(curr, (curr->player.state == true ? curr->player.player1_y_win : curr->player.player2_y_win),
-		  (curr->player.state == true ? curr->player.player1_x_win : curr->player.player2_x_win),
-		  (curr->player.state == true ? true : false)) == 1)
+		   (curr->player.state == true ? curr->player.player1_x_win : curr->player.player2_x_win),
+		   (curr->player.state == true ? true : false)) == 1)
 	{
 	  game_results(win, (curr->player.state == true ? 1 : 2));
 	  curr->state = 0;
@@ -75,6 +75,7 @@ int		game_loop(t_game *curr, WINDOW *win)
   curr->state = 1;
   while (1)
     {
+      update_goban(curr);
       if (curr->options.vs_ia == false
 	  || (curr->options.vs_ia == true && curr->player.state == true))
 	{

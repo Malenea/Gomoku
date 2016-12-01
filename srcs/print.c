@@ -79,8 +79,26 @@ void		print_options(t_game *curr, WINDOW *win)
       wprintw(win, "%s\n", curr->player.first == true ? "Player 1" : "Player 2/IA");
       wattroff(win, COLOR_PAIR(curr->player.first == true ? 1 : 2));
     }
-  wprintw(win, "\n\n%sRules :\n\n", TABS);
   if (curr->options.state == 2)
+    {
+      wprintw(win, "%s ", TABS);
+      wattron(win, COLOR_PAIR(1));
+      wprintw(win, "Game help:");
+      wattroff(win, COLOR_PAIR(1));
+      wprintw(win, "\t\t\t");
+      wattron(win, COLOR_PAIR(curr->player.help == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->player.help == true ? "ON" : "OFF");
+      wattroff(win, COLOR_PAIR(curr->player.help == true ? 1 : 2));
+    }
+  else
+    {
+      wprintw(win, "%s Game help:\t\t\t", TABS);
+      wattron(win, COLOR_PAIR(curr->player.help == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->player.help == true ? "ON" : "OFF");
+      wattroff(win, COLOR_PAIR(curr->player.help == true ? 1 : 2));
+    }
+  wprintw(win, "\n\n%sRules :\n\n", TABS);
+  if (curr->options.state == 3)
     {
       wprintw(win, "%s ", TABS);
       wattron(win, COLOR_PAIR(1));
@@ -98,7 +116,7 @@ void		print_options(t_game *curr, WINDOW *win)
       wprintw(win, "%s\n", curr->rules.c2 == true ? "Yes" : "No");
       wattroff(win, COLOR_PAIR(curr->rules.c2 == true ? 1 : 2));
     }
-  if (curr->options.state == 3)
+  if (curr->options.state == 4)
     {
       wprintw(win, "%s ", TABS);
       wattron(win, COLOR_PAIR(1));
@@ -116,7 +134,7 @@ void		print_options(t_game *curr, WINDOW *win)
       wprintw(win, "%s\n", curr->rules.r3 == true ? "Yes" : "No");
       wattroff(win, COLOR_PAIR(curr->rules.r3 == true ? 1 : 2));
     }
-  if (curr->options.state == 4)
+  if (curr->options.state == 5)
     {
       wprintw(win, "%s ", TABS);
       wattron(win, COLOR_PAIR(1));
@@ -183,6 +201,19 @@ int		print_menu(t_game *curr, WINDOW *win)
   return (0);
 }
 
+void		update_goban(t_game *curr)
+{
+  int		h;
+  int		l;
+
+  for (h = 0; h < curr->h; h++)
+    for (l = 0; l < curr->l; l++)
+      {
+	if (curr->goban[h][l].cont != EMPTY_SPOT)
+	  curr->goban[h][l].prio = NO_PRIO;
+      }
+}
+
 void		print_goban(t_game *curr, WINDOW *win)
 {
   int		h;
@@ -194,12 +225,30 @@ void		print_goban(t_game *curr, WINDOW *win)
 	{
 	  if (curr->cursy == h && curr->cursx == l)
 	    {
-	      wattron(win, COLOR_PAIR(1));
-	      wprintw(win, "%c", curr->goban[h][l].cont);
-	      wattroff(win, COLOR_PAIR(1));
+	      if (curr->goban[h][l].prio == NO_PRIO || curr->player.help == false)
+		{
+		  wattron(win, COLOR_PAIR(1));
+		  wprintw(win, "%c", curr->goban[h][l].cont);
+		  wattroff(win, COLOR_PAIR(1));
+		}
+	      else
+		{
+		  wattron(win, COLOR_PAIR(6));
+		  wprintw(win, "%c", curr->goban[h][l].cont);
+		  wattroff(win, COLOR_PAIR(6));
+		}
 	    }
 	  else
-	    wprintw(win, "%c", curr->goban[h][l].cont);
+	    {
+	      if (curr->goban[h][l].prio == NO_PRIO || curr->player.help == false)
+		wprintw(win, "%c", curr->goban[h][l].cont);
+	      else
+		{
+		  wattron(win, COLOR_PAIR(5));
+		  wprintw(win, "%c", curr->goban[h][l].cont);
+		  wattroff(win, COLOR_PAIR(5));
+		}
+	    }
 	}
       wprintw(win, "\n");
     }
@@ -235,10 +284,12 @@ void		prompt_options(t_game *curr, WINDOW *win)
 	  else if (curr->options.state == 1)
 	    curr->player.first = (curr->player.first == true ? false : true);
 	  else if (curr->options.state == 2)
-	    curr->rules.c2 = (curr->rules.c2 == true ? false : true);
+	    curr->player.help = (curr->player.help == true ? false : true);
 	  else if (curr->options.state == 3)
+	    curr->rules.c2 = (curr->rules.c2 == true ? false : true);
+	  else if (curr->options.state == 4)
 	    curr->rules.r3 = (curr->rules.r3 == true ? false : true);
-	  else if (curr->options.state == 4 && curr->rules.c2 == true)
+	  else if (curr->options.state == 5 && curr->rules.c2 == true)
 	    curr->rules.w5 = (curr->rules.w5 == true ? false : true);
 	  else if (curr->options.state == OPTIONS_NB)
 	    {

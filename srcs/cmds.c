@@ -7,21 +7,25 @@ int		player_cmds(t_game *curr, WINDOW *win)
   int		ret;
   int		ret2 = 1;
 
+  wclear(win);
+  print_goban(curr, win);
+  print_infos(curr, win);
+  wrefresh(win);
   reset_key(ch);
   while (read(0, ch, 4))
     {
       ch_sum = ch[0] + ch[1] + ch[2] + ch[3];
-      if (ch_sum == SPACE_KEY && curr->goban[curr->cursy][curr->cursx].cont == '-' && (ret2 = arbitrary(AUTHORITY, curr) == 0))
+      if (ch_sum == SPACE_KEY && curr->goban[curr->cursy][curr->cursx].cont == EMPTY_SPOT && (ret2 = arbitrary(AUTHORITY, curr) == 0))
 	{
 	  if (curr->options.vs_ia == false)
 	    {
-	      (curr->goban[curr->cursy][curr->cursx].cont = (curr->player.state == true ? 'o' : 'x'));
+	      (curr->goban[curr->cursy][curr->cursx].cont = (curr->player.state == true ? PLAYER_SPOT : IA_SPOT));
 	      curr->player.player1_tokens = (curr->player.state == true ? curr->player.player1_tokens - 1 : curr->player.player1_tokens);
 	      curr->player.player2_tokens = (curr->player.state == false ? curr->player.player2_tokens - 1 : curr->player.player2_tokens);
 	    }
 	  else
 	    {
-	      curr->goban[curr->cursy][curr->cursx].cont = 'o';
+	      curr->goban[curr->cursy][curr->cursx].cont = PLAYER_SPOT;
 	      curr->player.player1_tokens -= 1;
 	    }
 	  arbitrary(CHECK, curr);
