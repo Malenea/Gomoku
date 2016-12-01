@@ -233,9 +233,9 @@ void		print_goban(t_game *curr, WINDOW *win)
 		}
 	      else
 		{
-		  wattron(win, COLOR_PAIR(6));
+		  wattron(win, COLOR_PAIR(curr->goban[h][l].prio_color + 1));
 		  wprintw(win, "%c", curr->goban[h][l].cont);
-		  wattroff(win, COLOR_PAIR(6));
+		  wattroff(win, COLOR_PAIR(curr->goban[h][l].prio_color + 1));
 		}
 	    }
 	  else
@@ -244,9 +244,9 @@ void		print_goban(t_game *curr, WINDOW *win)
 		wprintw(win, "%c", curr->goban[h][l].cont);
 	      else
 		{
-		  wattron(win, COLOR_PAIR(5));
+		  wattron(win, COLOR_PAIR(curr->goban[h][l].prio_color));
 		  wprintw(win, "%c", curr->goban[h][l].cont);
-		  wattroff(win, COLOR_PAIR(5));
+		  wattroff(win, COLOR_PAIR(curr->goban[h][l].prio_color));;
 		}
 	    }
 	}

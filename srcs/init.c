@@ -10,6 +10,7 @@ void		reset_goban(t_game *curr)
       {
 	curr->goban[h][l].cont = EMPTY_SPOT;
 	curr->goban[h][l].prio = NO_PRIO;
+	curr->goban[h][l].prio = 1;
       }
   curr->y_calc = -1;
   curr->x_calc = -1;
@@ -36,6 +37,8 @@ void		init_ncurses(WINDOW *win)
   // For the helper
   init_pair(5, COLOR_BLACK, COLOR_CYAN);
   init_pair(6, COLOR_CYAN, COLOR_GREEN);
+  init_pair(7, COLOR_BLACK, COLOR_RED);
+  init_pair(8, COLOR_RED, COLOR_GREEN);
 }
 
 void		init_cursor(t_game *curr)
@@ -73,7 +76,7 @@ void		init_game(t_game *curr)
   curr->h = DEFAULT_VALUE;
   curr->l = DEFAULT_VALUE;
   init_cursor(curr);
-  curr->player.help = false;
+  curr->player.help = true;
   curr->player.first = true;
   init_players(curr);
   init_options(curr);

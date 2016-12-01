@@ -113,6 +113,7 @@ typedef struct	s_case
 {
   char		cont;
   int		prio;
+  int		prio_color;
 }		t_case;
 
 typedef struct	s_game

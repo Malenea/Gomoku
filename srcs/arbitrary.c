@@ -212,9 +212,23 @@ int		count_h(t_game *curr, int h, int l, bool state)
       else
 	curr->player.p2_w5_cond = true;
       curr->goban[curr->y_calc][curr->x_calc].prio = PRIO_DENY;
+      curr->goban[curr->y_calc][curr->x_calc].prio_color = (curr->player.state == true ? 5 : 7);
       curr->y_calc = -1;
       curr->x_calc = -1;
       return (0);
+    }
+  if (res == 4)
+    {
+      if (h <= curr->h && curr->goban[h][l].cont == EMPTY_SPOT)
+	{
+	  curr->goban[h][l].prio = PRIO_WIN;
+	  curr->goban[h][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+      if (h_save > 0 && curr->goban[h_save - 1][l].cont == EMPTY_SPOT)
+	{
+	  curr->goban[h_save - 1][l].prio = PRIO_WIN;
+	  curr->goban[h_save - 1][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
     }
   if (res >= 5)
     return (1);
@@ -261,9 +275,23 @@ int		count_l(t_game *curr, int h, int l, bool state)
       else
 	curr->player.p2_w5_cond = true;
       curr->goban[curr->y_calc][curr->x_calc].prio = PRIO_DENY;
+      curr->goban[curr->y_calc][curr->x_calc].prio_color = (curr->player.state == true ? 5 : 7);
       curr->y_calc = -1;
       curr->x_calc = -1;
       return (0);
+    }
+  if (res == 4)
+    {
+      if (l <= curr->l && curr->goban[h][l].cont == EMPTY_SPOT)
+	{
+	  curr->goban[h][l].prio = PRIO_WIN;
+	  curr->goban[h][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+      if (l_save > 0 && curr->goban[h][l_save - 1].cont == EMPTY_SPOT)
+	{
+	  curr->goban[h][l_save - 1].prio = PRIO_WIN;
+	  curr->goban[h][l_save - 1].prio_color = (curr->player.state == true ? 5 : 7);
+	}
     }
   if (res >= 5)
     return (1);
@@ -319,9 +347,23 @@ int		count_d1(t_game *curr, int h, int l, bool state)
       else
 	curr->player.p2_w5_cond = true;
       curr->goban[curr->y_calc][curr->x_calc].prio = PRIO_DENY;
+      curr->goban[curr->y_calc][curr->x_calc].prio_color = (curr->player.state == true ? 5 : 7);
       curr->y_calc = -1;
       curr->x_calc = -1;
       return (0);
+    }
+  if (res == 4)
+    {
+      if (l <= curr->l && h <= curr->h && curr->goban[h][l].cont == EMPTY_SPOT)
+	{
+	  curr->goban[h][l].prio = PRIO_WIN;
+	  curr->goban[h][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+      if (l_save > 0 && h_save > 0 && curr->goban[h_save - 1][l_save - 1].cont == EMPTY_SPOT)
+	{
+	  curr->goban[h_save - 1][l_save - 1].prio = PRIO_WIN;
+	  curr->goban[h_save - 1][l_save - 1].prio_color = (curr->player.state == true ? 5 : 7);
+	}
     }
   if (res >= 5)
     return (1);
@@ -377,9 +419,23 @@ int		count_d2(t_game *curr, int h, int l, bool state)
       else
 	curr->player.p2_w5_cond = true;
       curr->goban[curr->y_calc][curr->x_calc].prio = PRIO_DENY;
+      curr->goban[curr->y_calc][curr->x_calc].prio_color = (curr->player.state == true ? 5 : 7);
       curr->y_calc = -1;
       curr->x_calc = -1;
       return (0);
+    }
+    if (res == 4)
+    {
+      if (l <= curr->l && h >= 0 && curr->goban[h][l].cont == EMPTY_SPOT)
+	{
+	  curr->goban[h][l].prio = PRIO_WIN;
+	  curr->goban[h][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+      if (l_save > 0 && h_save < curr->h && curr->goban[h_save + 1][l_save - 1].cont == EMPTY_SPOT)
+	{
+	  curr->goban[h_save + 1][l_save - 1].prio = PRIO_WIN;
+	  curr->goban[h_save + 1][l_save - 1].prio_color = (curr->player.state == true ? 5 : 7);
+	}
     }
   if (res >= 5)
     return (1);
