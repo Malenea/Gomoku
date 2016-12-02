@@ -182,7 +182,7 @@ int		count_h(t_game *curr, int h, int l, bool state)
     return (0);
   while (h > 0 && curr->goban[h][l].cont == (state == true ? PLAYER_SPOT : IA_SPOT))
     h -= 1;
-  if (h > 0 && curr->goban[h][l].cont != (state == true ? PLAYER_SPOT : IA_SPOT))
+  if (h < curr->h && curr->goban[h][l].cont != (state == true ? PLAYER_SPOT : IA_SPOT))
     h += 1;
   h_save = h;
   while (h < curr->h && curr->goban[h][l].cont == (state == true ? PLAYER_SPOT : IA_SPOT))
@@ -245,7 +245,7 @@ int		count_l(t_game *curr, int h, int l, bool state)
     return (0);
   while (l > 0 && curr->goban[h][l].cont == (state == true ? PLAYER_SPOT : IA_SPOT))
     l -= 1;
-  if (l > 0 && curr->goban[h][l].cont != (state == true ? PLAYER_SPOT : IA_SPOT))
+  if (l < curr->l && curr->goban[h][l].cont != (state == true ? PLAYER_SPOT : IA_SPOT))
     l += 1;
   l_save = l;
   while (l < curr->l && curr->goban[h][l].cont == (state == true ? PLAYER_SPOT : IA_SPOT))
