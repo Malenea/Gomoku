@@ -51,10 +51,16 @@
 # define	DRAW_GAME (11)
 # define	WIN_GAME (42)
 
+# define	H (1)
+# define	L (2)
+# define	D1 (3)
+# define	D2 (4)
+
 # define	NO_PRIO (1)
-# define	PRIO_LOSE (2)
-# define	PRIO_DENY (3)
-# define	PRIO_WIN (4)
+# define	PRIO_CAPTURE (2)
+# define	PRIO_LOSE (3)
+# define	PRIO_DENY (4)
+# define	PRIO_WIN (5)
 
 /*
 ** Enum
@@ -157,7 +163,13 @@ int		init_goban(t_game *curr);
 */
 
 int		player_cmds(t_game *curr, WINDOW *win);
-void		ia_cmds(t_game *curr, WINDOW *win);
+int		ia_cmds(t_game *curr, WINDOW *win);
+
+/*
+** IA functions
+*/
+
+int		goban_reader(t_game *curr);
 
 /*
 ** Arbitrary functions

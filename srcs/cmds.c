@@ -88,14 +88,46 @@ int		player_cmds(t_game *curr, WINDOW *win)
   return (0);
 }
 
-void		ia_cmds(t_game *curr, WINDOW *win)
+int		ia_cmds(t_game *curr, WINDOW *win)
 {
-  wclear(win);
-  wprintw(win, "IA is playing.");
-  wrefresh(win);
-  sleep(2);
-  wclear(win);
-  print_goban(curr, win);
-  wrefresh(win);
+  int		ret;
+  int		ret2 = 1;
+
+  if ((goban_reader(curr)) == 0)
+    {
+      curr->player.state = true;// <- FIXME
+      return (0);
+    }
+  if ((ret2 = arbitrary(AUTHORITY, curr)) == 0)
+    {
+      curr->goban[curr->cursy][curr->cursx].cont = IA_SPOT;
+      curr->player.player2_tokens -= 1;
+      arbitrary(CHECK, curr);
+      ret = arbitrary(SCORE, curr);
+      if (ret == WIN_GAME)
+	{
+	  game_results(win, (curr->player.state == true ? 1 : 2));
+	  curr->state = 0;
+	  ret = prompt_menu(curr, win);
+	  if (ret == END_GAME)
+	    return (END_GAME);
+	}
+      else if (ret == DRAW_GAME)
+	{
+	  game_results(win, 0);
+	  curr->state = 0;
+	  ret = prompt_menu(curr, win);
+	  if (ret == END_GAME)
+	    return (END_GAME);
+	}
+      else
+	{
+	  wclear(win);
+	  print_goban(curr, win);
+	  wrefresh(win);
+	}
+    }
+  //
   curr->player.state = true;
+  return (0);
 }

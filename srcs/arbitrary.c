@@ -217,6 +217,27 @@ int		count_h(t_game *curr, int h, int l, bool state)
       curr->x_calc = -1;
       return (0);
     }
+  if (res == 2)
+    {
+      if (h <= curr->h && h_save > 0 && curr->goban[h][l].cont == (curr->player.state == true ? IA_SPOT : PLAYER_SPOT)
+	   && curr->goban[h_save - 1][l].cont == EMPTY_SPOT)
+	{
+	  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture) >= 8)
+	    curr->goban[h_save - 1][l].prio = PRIO_WIN;
+	  else
+	    curr->goban[h_save - 1][l].prio = PRIO_CAPTURE;
+	  curr->goban[h_save - 1][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+      if (h <= curr->h && h_save > 0 && curr->goban[h][l].cont == EMPTY_SPOT
+	  && curr->goban[h_save - 1][l].cont == (curr->player.state == true ? IA_SPOT : PLAYER_SPOT))
+	{
+	  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture) >= 8)
+	    curr->goban[h][l].prio = PRIO_WIN;
+	  else
+	    curr->goban[h][l].prio = PRIO_CAPTURE;
+	  curr->goban[h][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+    }
   if (res == 4)
     {
       if (h <= curr->h && curr->goban[h][l].cont == EMPTY_SPOT)
@@ -279,6 +300,27 @@ int		count_l(t_game *curr, int h, int l, bool state)
       curr->y_calc = -1;
       curr->x_calc = -1;
       return (0);
+    }
+  if (res == 2)
+    {
+      if (l <= curr->l && l_save > 0 && curr->goban[h][l].cont == (curr->player.state == true ? IA_SPOT : PLAYER_SPOT)
+	  && curr->goban[h][l_save - 1].cont == EMPTY_SPOT)
+	{
+	  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture) >= 8)
+	    curr->goban[h][l_save - 1].prio = PRIO_WIN;
+	  else
+	    curr->goban[h][l_save - 1].prio = PRIO_CAPTURE;
+	  curr->goban[h][l_save - 1].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+      if (l <= curr->l && l_save > 0 && curr->goban[h][l].cont == EMPTY_SPOT
+	  && curr->goban[h][l_save - 1].cont == (curr->player.state == true ? IA_SPOT : PLAYER_SPOT))
+	{
+	  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture) >= 8)
+	    curr->goban[h][l].prio = PRIO_WIN;
+	  else
+	    curr->goban[h][l].prio = PRIO_CAPTURE;
+	  curr->goban[h][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
     }
   if (res == 4)
     {
@@ -352,6 +394,27 @@ int		count_d1(t_game *curr, int h, int l, bool state)
       curr->x_calc = -1;
       return (0);
     }
+  if (res == 2)
+    {
+      if (l <= curr->l && l_save > 0 && h <= curr->h && curr->goban[h][l].cont == (curr->player.state == true ? IA_SPOT : PLAYER_SPOT)
+	  && h_save > 0 && curr->goban[h_save - 1][l_save - 1].cont == EMPTY_SPOT)
+	{
+	  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture) >= 8)
+	    curr->goban[h_save - 1][l_save - 1].prio = PRIO_WIN;
+	  else
+	    curr->goban[h_save - 1][l_save - 1].prio = PRIO_CAPTURE;
+	  curr->goban[h_save - 1][l_save - 1].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+      if (l <= curr->l && l_save > 0 && h <= curr->h && curr->goban[h][l].cont == EMPTY_SPOT
+	  && h_save > 0 && curr->goban[h_save - 1][l_save - 1].cont == (curr->player.state == true ? IA_SPOT : PLAYER_SPOT))
+	{
+	  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture) >= 8)
+	    curr->goban[h][l].prio = PRIO_WIN;
+	  else
+	    curr->goban[h][l].prio = PRIO_CAPTURE;
+	  curr->goban[h][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+    }
   if (res == 4)
     {
       if (l <= curr->l && h <= curr->h && curr->goban[h][l].cont == EMPTY_SPOT)
@@ -424,7 +487,28 @@ int		count_d2(t_game *curr, int h, int l, bool state)
       curr->x_calc = -1;
       return (0);
     }
-    if (res == 4)
+  if (res == 2)
+    {
+      if (l <= curr->l && l_save > 0 && h >= 0 && curr->goban[h][l].cont == (curr->player.state == true ? IA_SPOT : PLAYER_SPOT)
+	  && h_save < curr->h && curr->goban[h_save + 1][l_save - 1].cont == EMPTY_SPOT)
+	{
+	  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture) >= 8)
+	    curr->goban[h_save + 1][l_save - 1].prio = PRIO_WIN;
+	  else
+	    curr->goban[h_save + 1][l_save - 1].prio = PRIO_CAPTURE;
+	  curr->goban[h_save + 1][l_save - 1].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+      if (l <= curr->l && l_save > 0 && h >= 0 && curr->goban[h][l].cont == EMPTY_SPOT
+	  && h_save < curr->h && curr->goban[h_save + 1][l_save - 1].cont == (curr->player.state == true ? IA_SPOT : PLAYER_SPOT))
+	{
+	  if ((curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture) >= 8)
+	    curr->goban[h][l].prio = PRIO_WIN;
+	  else
+	    curr->goban[h][l].prio = PRIO_CAPTURE;
+	  curr->goban[h][l].prio_color = (curr->player.state == true ? 5 : 7);
+	}
+    }
+  if (res == 4)
     {
       if (l <= curr->l && h >= 0 && curr->goban[h][l].cont == EMPTY_SPOT)
 	{

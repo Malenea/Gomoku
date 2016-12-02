@@ -88,7 +88,9 @@ int		game_loop(t_game *curr, WINDOW *win)
 	}
       else if (curr->options.vs_ia == true && curr->player.state == false)
 	{
-	  ia_cmds(curr, win);
+	  ret = ia_cmds(curr, win);
+	  if (ret == END_GAME)
+	    return (end_game(curr, win));
 	}
       else
 	return (MY_ERROR(-EINVAL, "Something went wrong during the game, exiting now."));
