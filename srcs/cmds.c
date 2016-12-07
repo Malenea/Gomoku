@@ -95,12 +95,12 @@ int		ia_cmds(t_game *curr, WINDOW *win)
 
   if ((goban_reader(curr)) == 0)
     ia_process(curr);
-  if ((ret2 = arbitrary(AUTHORITY, curr)) == 0)
+  arbitrary(CHECK, curr);
+  ret = arbitrary(SCORE, curr);
+  if ((ret = arbitrary(AUTHORITY, curr)) == 0)
     {
       curr->goban[curr->cursy][curr->cursx].cont = IA_SPOT;
       curr->player.player2_tokens -= 1;
-      arbitrary(CHECK, curr);
-      ret = arbitrary(SCORE, curr);
       if (ret == WIN_GAME)
 	{
 	  game_results(win, (curr->player.state == true ? 1 : 2));

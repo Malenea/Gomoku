@@ -174,7 +174,7 @@ int		ia_cmds(t_game *curr, WINDOW *win);
 */
 
 int		goban_reader(t_game *curr);
-int		ia_process(t_game *curr);
+void		ia_process(t_game *curr);
 
 /*
 ** Arbitrary functions
