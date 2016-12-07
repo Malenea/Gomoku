@@ -23,9 +23,44 @@ void		reset_forbidden(t_game *curr)
 	curr->goban[h][l].forbidden = false;
 }
 
-int		ia_think(t_game *curr)
+void		ia_think(t_game *curr)
 {
-  return (1);
+}
+
+int		ia_action(t_game *curr)
+{
+  int		prio = NO_PRIO;
+  int		y_save = -1;
+  int		x_save = -1;
+
+  ia_think(curr);
+  for (int h = 0; h < curr->h; h++)
+    {
+      for (int l = 0; l < curr->l; l++)
+	{
+	  if (curr->goban[h][l].ia_prio > prio)
+	    {
+	      prio = curr->goban[h][l].ia_prio;
+	      y_save = h;
+	      x_save = l;
+	    }
+	}
+    }
+  if (prio != NO_PRIO)
+    {
+      if (y_save != -1 && x_save != -1)
+	{
+	  curr->cursy = y_save;
+	  curr->cursx = x_save;
+	  if (arbitrary(AUTHORITY, curr) != 0)
+	    {
+	      curr->goban[curr->cursy][curr->cursx].forbidden = true;
+	      return (ia_action(curr));
+	    }
+	}
+      return (1);
+    }
+  return (0);
 }
 
 int		ia_play(t_game *curr)
@@ -33,9 +68,8 @@ int		ia_play(t_game *curr)
   int		ret;
 
   reset_forbidden(curr);
-  while ((arbitrary(AUTHORITY, curr)) != 0)
-    ret = ia_think(curr);
-  if (ret == 1)
+  ret = ia_action(curr);
+  if (ret == 0)
     return (0);
   return (1);
 }
