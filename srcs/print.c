@@ -225,7 +225,8 @@ void		print_goban(t_game *curr, WINDOW *win)
 	{
 	  if (curr->cursy == h && curr->cursx == l)
 	    {
-	      if (curr->goban[h][l].prio == NO_PRIO || curr->player.help == false)
+	      if ((curr->goban[h][l].prio == NO_PRIO && curr->goban[h][l].ia_prio == NO_PRIO)
+		  || curr->player.help == false)
 		{
 		  wattron(win, COLOR_PAIR(1));
 		  wprintw(win, "%c", curr->goban[h][l].cont);
@@ -240,7 +241,8 @@ void		print_goban(t_game *curr, WINDOW *win)
 	    }
 	  else
 	    {
-	      if (curr->goban[h][l].prio == NO_PRIO || curr->player.help == false)
+	      if ((curr->goban[h][l].prio == NO_PRIO && curr->goban[h][l].ia_prio == NO_PRIO)
+		  || curr->player.help == false)
 		wprintw(win, "%c", curr->goban[h][l].cont);
 	      else
 		{

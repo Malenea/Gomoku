@@ -12,6 +12,7 @@
 # include	<errno.h>
 # include	<getopt.h>
 # include	<ncurses.h>
+# include	<time.h>
 # include	"trace.h"
 
 /*
@@ -57,6 +58,7 @@
 # define	D2 (4)
 
 # define	NO_PRIO (1)
+
 # define	PRIO_CAPTURE (2)
 # define	PRIO_LOSE (3)
 # define	PRIO_DENY (4)
@@ -120,6 +122,8 @@ typedef struct	s_case
   char		cont;
   int		prio;
   int		prio_color;
+
+  int		ia_prio;
 }		t_case;
 
 typedef struct	s_game
@@ -170,6 +174,7 @@ int		ia_cmds(t_game *curr, WINDOW *win);
 */
 
 int		goban_reader(t_game *curr);
+int		ia_process(t_game *curr);
 
 /*
 ** Arbitrary functions

@@ -94,10 +94,7 @@ int		ia_cmds(t_game *curr, WINDOW *win)
   int		ret2 = 1;
 
   if ((goban_reader(curr)) == 0)
-    {
-      curr->player.state = true;// <- FIXME
-      return (0);
-    }
+    ia_process(curr);
   if ((ret2 = arbitrary(AUTHORITY, curr)) == 0)
     {
       curr->goban[curr->cursy][curr->cursx].cont = IA_SPOT;
@@ -127,7 +124,6 @@ int		ia_cmds(t_game *curr, WINDOW *win)
 	  wrefresh(win);
 	}
     }
-  //
   curr->player.state = true;
   return (0);
 }

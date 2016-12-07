@@ -11,6 +11,7 @@ void		reset_goban(t_game *curr)
 	curr->goban[h][l].cont = EMPTY_SPOT;
 	curr->goban[h][l].prio = NO_PRIO;
 	curr->goban[h][l].prio = 1;
+	curr->goban[h][l].ia_prio = NO_PRIO;
       }
   curr->y_calc = -1;
   curr->x_calc = -1;

@@ -29,6 +29,7 @@ SRCS		:= $(SRCS_P)gomoku.c\
 		   $(SRCS_P)init.c\
 		   $(SRCS_P)cmds.c\
 		   $(SRCS_P)ia_preprocess.c\
+		   $(SRCS_P)ia_process.c\
 		   $(SRCS_P)arbitrary.c\
 		   $(SRCS_P)rule_of_three.c\
 		   $(SRCS_P)rule_of_two.c\
@@ -44,6 +45,7 @@ TMP		:= gomoku.o\
 		   init.o\
 		   cmds.o\
 		   ia_preprocess.o\
+		   ia_process.o\
 		   arbitrary.o\
 		   rule_of_three.o\
 		   rule_of_two.o\
@@ -59,6 +61,7 @@ OBJS		:= $(OBJS_P)gomoku.o\
 		   $(OBJS_P)init.o\
 		   $(OBJS_P)cmds.o\
 		   $(OBJS_P)ia_preprocess.o\
+		   $(OBJS_P)ia_process.o\
 		   $(OBJS_P)arbitrary.o\
 		   $(OBJS_P)rule_of_three.o\
 		   $(OBJS_P)rule_of_two.o\
