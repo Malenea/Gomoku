@@ -10,34 +10,33 @@ int		ia_rand(t_game *curr)
   curr->cursx = rand() % curr->l;
   if (arbitrary(AUTHORITY, curr) != 0)
     return (ia_rand(curr));
+  curr->goban[curr->cursy][curr->cursx].cont = IA_SPOT;
+  curr->player.player2_tokens -= 1;
   return (0);
 }
 
-int		ia_read_goban(t_game *curr)
+void		reset_forbidden(t_game *curr)
 {
-  int		prio = NO_PRIO;
-
   for (int h = 0; h < curr->h; h++)
     for (int l = 0; l < curr->l; l++)
-      {
-	if (curr->goban[h][l].ia_prio > prio)
-	  prio = curr->goban[h][l].ia_prio;
-      }
-  if (prio != NO_PRIO)
-    return (1);
-  return (0);
+      if (curr->goban[h][l].forbidden == true)
+	curr->goban[h][l].forbidden = false;
+}
+
+int		ia_think(t_game *curr)
+{
+  return (1);
 }
 
 int		ia_play(t_game *curr)
 {
   int		ret;
 
-  if (ia_read_goban(curr) == 0)
+  reset_forbidden(curr);
+  while ((arbitrary(AUTHORITY, curr)) != 0)
+    ret = ia_think(curr);
+  if (ret == 1)
     return (0);
-  while ((ret = arbitrary(AUTHORITY, curr)) != 0)
-    {
-      // here
-    }
   return (1);
 }
 

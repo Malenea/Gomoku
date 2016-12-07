@@ -124,6 +124,7 @@ typedef struct	s_case
   int		prio_color;
 
   int		ia_prio;
+  bool		forbidden;
 }		t_case;
 
 typedef struct	s_game

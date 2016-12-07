@@ -97,32 +97,27 @@ int		ia_cmds(t_game *curr, WINDOW *win)
     ia_process(curr);
   arbitrary(CHECK, curr);
   ret = arbitrary(SCORE, curr);
-  if ((ret = arbitrary(AUTHORITY, curr)) == 0)
+  if (ret == WIN_GAME)
     {
-      curr->goban[curr->cursy][curr->cursx].cont = IA_SPOT;
-      curr->player.player2_tokens -= 1;
-      if (ret == WIN_GAME)
-	{
-	  game_results(win, (curr->player.state == true ? 1 : 2));
-	  curr->state = 0;
-	  ret = prompt_menu(curr, win);
-	  if (ret == END_GAME)
-	    return (END_GAME);
-	}
-      else if (ret == DRAW_GAME)
-	{
-	  game_results(win, 0);
-	  curr->state = 0;
-	  ret = prompt_menu(curr, win);
-	  if (ret == END_GAME)
-	    return (END_GAME);
-	}
-      else
-	{
-	  wclear(win);
-	  print_goban(curr, win);
-	  wrefresh(win);
-	}
+      game_results(win, (curr->player.state == true ? 1 : 2));
+      curr->state = 0;
+      ret = prompt_menu(curr, win);
+      if (ret == END_GAME)
+	return (END_GAME);
+    }
+  else if (ret == DRAW_GAME)
+    {
+      game_results(win, 0);
+      curr->state = 0;
+      ret = prompt_menu(curr, win);
+      if (ret == END_GAME)
+	return (END_GAME);
+    }
+  else
+    {
+      wclear(win);
+      print_goban(curr, win);
+      wrefresh(win);
     }
   curr->player.state = true;
   return (0);

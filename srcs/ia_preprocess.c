@@ -17,6 +17,10 @@ int		goban_reader(t_game *curr)
 	}
     }
   if (prio != NO_PRIO)
-    return (1);
+    {
+      curr->goban[curr->cursy][curr->cursx].cont = IA_SPOT;
+      curr->player.player2_tokens -= 1;
+      return (1);
+    }
   return (0);
 }
