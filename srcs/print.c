@@ -262,7 +262,8 @@ void		print_infos(t_game *curr, WINDOW *win)
   wprintw(win, "Player %d's turn\n", (curr->player.state == true ? 1 : 2));
   wprintw(win, "Tokens left: %d\n", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
   wprintw(win, "Tokens own: %d\n", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
-  wprintw(win, "Y : %d / X : %d", curr->cursy + 1, curr->cursx + 1);
+  //wprintw(win, "Y : %d / X : %d", curr->cursy + 1, curr->cursx + 1);
+  wprintw(win, "IA_PRIO : %d", curr->goban[curr->cursy][curr->cursx].ia_prio);
   wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 }
 

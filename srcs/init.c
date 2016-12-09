@@ -10,7 +10,6 @@ void		reset_goban(t_game *curr)
       {
 	curr->goban[h][l].cont = EMPTY_SPOT;
 	curr->goban[h][l].prio = NO_PRIO;
-	curr->goban[h][l].prio = 1;
 	curr->goban[h][l].ia_prio = NO_PRIO;
 	curr->goban[h][l].forbidden = false;
       }
@@ -78,7 +77,7 @@ void		init_game(t_game *curr)
   curr->h = DEFAULT_VALUE;
   curr->l = DEFAULT_VALUE;
   init_cursor(curr);
-  curr->player.help = true;
+  curr->player.help = false;
   curr->player.first = true;
   init_players(curr);
   init_options(curr);

@@ -36,14 +36,14 @@ int		check_prio_h(t_game *curr, int h, int l)
       || (h > 2 && curr->goban[h - 3][l].cont != PLAYER_SPOT
 	  && curr->goban[h - 2][l].cont == IA_SPOT && curr->goban[h - 1][l].cont == IA_SPOT
 	  && (h < curr->h && curr->goban[h + 1][l].cont != PLAYER_SPOT)))
-    tokens += curr->h * 50;
+    tokens += curr->h * 40;
   if ((h < curr->h - 3 && curr->goban[h + 4][l].cont != IA_SPOT
        && curr->goban[h + 3][l].cont == PLAYER_SPOT && curr->goban[h + 2][l].cont == PLAYER_SPOT
        && curr->goban[h + 1][l].cont == PLAYER_SPOT)
       || (h > 3 && curr->goban[h - 4][l].cont != IA_SPOT
 	  && curr->goban[h - 3][l].cont == PLAYER_SPOT && curr->goban[h - 2][l].cont == PLAYER_SPOT
 	  && curr->goban[h - 1][l].cont == PLAYER_SPOT))
-    tokens += curr->h * 40;
+    tokens += curr->h * 50;
   if ((h < curr->h - 2 && curr->goban[h + 3][l].cont == IA_SPOT
        && curr->goban[h + 2][l].cont == PLAYER_SPOT && curr->goban[h + 1][l].cont == PLAYER_SPOT)
       || (h > 2 && curr->goban[h - 3][l].cont == IA_SPOT
@@ -80,14 +80,14 @@ int		check_prio_l(t_game *curr, int h, int l)
       || (l > 2 && curr->goban[h][l - 3].cont != PLAYER_SPOT
 	  && curr->goban[h][l - 2].cont == IA_SPOT && curr->goban[h][l - 1].cont == IA_SPOT
 	  && (l < curr->l && curr->goban[h][l + 1].cont != PLAYER_SPOT)))
-    tokens += curr->h * 50;
+    tokens += curr->h * 40;
   if ((l < curr->l - 3 && curr->goban[h][l + 4].cont != IA_SPOT
        && curr->goban[h][l + 3].cont == PLAYER_SPOT && curr->goban[h][l + 2].cont == PLAYER_SPOT
        && curr->goban[h][l + 1].cont == PLAYER_SPOT)
       || (l > 3 && curr->goban[h][l - 4].cont != IA_SPOT
 	  && curr->goban[h][l - 3].cont == PLAYER_SPOT && curr->goban[h][l - 2].cont == PLAYER_SPOT
 	  && curr->goban[h][l - 1].cont == PLAYER_SPOT))
-    tokens += curr->h * 40;
+    tokens += curr->h * 50;
   if ((l < curr->l - 2 && curr->goban[h][l + 3].cont == IA_SPOT
        && curr->goban[h][l + 2].cont == PLAYER_SPOT && curr->goban[h][l + 1].cont == PLAYER_SPOT)
       || (l > 2 && curr->goban[h][l - 3].cont == IA_SPOT
@@ -124,14 +124,14 @@ int		check_prio_d1(t_game *curr, int h, int l)
       || (h > 2 && l > 2 && curr->goban[h - 3][l - 3].cont != PLAYER_SPOT
 	  && curr->goban[h - 2][l - 2].cont == IA_SPOT && curr->goban[h - 1][l - 1].cont == IA_SPOT
 	  && (h < curr->h && l < curr->l && curr->goban[h + 1][l + 1].cont != PLAYER_SPOT)))
-    tokens += curr->h * 50;
+    tokens += curr->h * 40;
   if ((h < curr->h - 3 && l < curr->l - 3 && curr->goban[h + 4][l + 4].cont != IA_SPOT
        && curr->goban[h + 3][l + 3].cont == PLAYER_SPOT && curr->goban[h + 2][l + 2].cont == PLAYER_SPOT
        && curr->goban[h + 1][l + 1].cont == PLAYER_SPOT)
       || (h > 3 && l > 3 && curr->goban[h - 4][l - 4].cont != IA_SPOT
 	  && curr->goban[h - 3][l - 3].cont == PLAYER_SPOT && curr->goban[h - 2][l - 2].cont == PLAYER_SPOT
 	  && curr->goban[h - 1][l - 1].cont == PLAYER_SPOT))
-    tokens += curr->h * 40;
+    tokens += curr->h * 50;
   if ((h < curr->h - 2 && l < curr->h - 2 && curr->goban[h + 3][l + 3].cont == IA_SPOT
        && curr->goban[h + 2][l + 2].cont == PLAYER_SPOT && curr->goban[h + 1][l + 1].cont == PLAYER_SPOT)
       || (h > 2 && l > 2 && curr->goban[h - 3][l - 3].cont == IA_SPOT
@@ -168,14 +168,14 @@ int		check_prio_d2(t_game *curr, int h, int l)
       || (h < curr->h - 2 && l > 2 && curr->goban[h + 3][l - 3].cont != PLAYER_SPOT
 	  && curr->goban[h + 2][l - 2].cont == IA_SPOT && curr->goban[h + 1][l - 1].cont == IA_SPOT
 	  && (h > 0 && l < curr->l && curr->goban[h - 1][l + 1].cont != PLAYER_SPOT)))
-    tokens += curr->h * 50;
+    tokens += curr->h * 40;
   if ((h > 3 && l < curr->l - 3 && curr->goban[h - 4][l + 4].cont != IA_SPOT
        && curr->goban[h - 3][l + 3].cont == PLAYER_SPOT && curr->goban[h - 2][l + 2].cont == PLAYER_SPOT
        && curr->goban[h - 1][l + 1].cont == PLAYER_SPOT)
       || (h < curr->h - 3 && l > 3 && curr->goban[h + 4][l - 4].cont != IA_SPOT
 	  && curr->goban[h + 3][l - 3].cont == PLAYER_SPOT && curr->goban[h + 2][l - 2].cont == PLAYER_SPOT
 	  && curr->goban[h + 1][l - 1].cont == PLAYER_SPOT))
-    tokens += curr->h * 40;
+    tokens += curr->h * 50;
   if ((h > 2 && l < curr->h - 2 && curr->goban[h - 3][l + 3].cont == IA_SPOT
        && curr->goban[h - 2][l + 2].cont == PLAYER_SPOT && curr->goban[h - 1][l + 1].cont == PLAYER_SPOT)
       || (h < curr->h - 2 && l > 2 && curr->goban[h + 3][l - 3].cont == IA_SPOT
@@ -212,10 +212,62 @@ int		check_prio(t_game *curr, int h, int l)
 
 int		check_play_h(t_game *curr, int h, int l)
 {
+  int		res = 0;
+  int		add_tokens;
+  int		free_cases = 0;
+  int		h_pos;
+
+  for (h_pos = h; h_pos < curr->h && curr->goban[h_pos][l].cont != PLAYER_SPOT; h_pos++)
+    free_cases += 1;
+  for (h_pos = h; h_pos > 0 && curr->goban[h_pos][l].cont != PLAYER_SPOT; h_pos--)
+    free_cases += 1;
+  if (free_cases < 5)
+    return (-(curr->goban[h][l].ia_prio));
+  add_tokens = curr->h;
+  for (h_pos = h; h_pos < curr->h && curr->goban[h_pos][l].cont != PLAYER_SPOT; h_pos++)
+    {
+      if (curr->goban[h_pos][l].cont == IA_SPOT)
+	res += add_tokens;
+      add_tokens -= 1;
+    }
+  add_tokens = curr->h;
+  for (h_pos = h; h_pos > 0 && curr->goban[h_pos][l].cont != PLAYER_SPOT; h_pos--)
+    {
+      if (curr->goban[h_pos][l].cont == IA_SPOT)
+	res += add_tokens;
+      add_tokens -= 1;
+    }
+  return (res);
 }
 
 int		check_play_l(t_game *curr, int h, int l)
 {
+  int		res = 0;
+  int		add_tokens;
+  int		free_cases = 0;
+  int		l_pos;
+
+  for (l_pos = l; l_pos < curr->l && curr->goban[h][l_pos].cont != PLAYER_SPOT; l_pos++)
+    free_cases += 1;
+  for (l_pos = l; l_pos > 0 && curr->goban[h][l_pos].cont != PLAYER_SPOT; l_pos--)
+    free_cases += 1;
+  if (free_cases < 5)
+    return (-(curr->goban[h][l].ia_prio));
+  add_tokens = curr->h;
+  for (l_pos = l; l_pos < curr->l && curr->goban[h][l_pos].cont != PLAYER_SPOT; l_pos++)
+    {
+      if (curr->goban[h][l_pos].cont == IA_SPOT)
+	res += add_tokens;
+      add_tokens -= 1;
+    }
+  add_tokens = curr->h;
+  for (l_pos = l; l_pos > 0 && curr->goban[h][l_pos].cont != PLAYER_SPOT; l_pos--)
+    {
+      if (curr->goban[h][l_pos].cont == IA_SPOT)
+	res += add_tokens;
+      add_tokens -= 1;
+    }
+  return (res);
 }
 
 int		check_play_d1(t_game *curr, int h, int l)
@@ -228,6 +280,11 @@ int		check_play_d2(t_game *curr, int h, int l)
 
 int		check_play(t_game *curr, int h, int l)
 {
+  int		res = 0;
+
+  res += check_play_h(curr, h, l);
+  res += check_play_l(curr, h, l);
+  return (res);
 }
 
 void		check_around(t_game *curr, int h, int l)
