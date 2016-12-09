@@ -119,6 +119,6 @@ int		ia_cmds(t_game *curr, WINDOW *win)
       print_goban(curr, win);
       wrefresh(win);
     }
-  curr->player.state = true;
+  curr->player.state = (curr->player.state == true ? false : true);
   return (0);
 }

@@ -64,6 +64,12 @@
 # define	PRIO_DENY (4)
 # define	PRIO_WIN (5)
 
+# define	ADD_TOKEN (1)
+# define	AVOID_TOKEN (-1)
+
+# define	IA (1)
+# define	PLAYER (2)
+
 /*
 ** Enum
 */
