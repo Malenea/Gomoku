@@ -66,6 +66,7 @@ void		init_players(t_game *curr)
 void		init_options(t_game *curr)
 {
   curr->options.vs_ia = true;
+  curr->options.debug = false;
 }
 
 void		init_game(t_game *curr)

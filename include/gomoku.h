@@ -35,7 +35,7 @@
 # define	RESUME (10)
 # define	NEW_GAME (1)
 # define	OPTIONS (2)
-# define	OPTIONS_NB (6)
+# define	OPTIONS_NB (7)
 # define	END_GAME (42)
 
 # define	SPACE_KEY (32)
@@ -96,6 +96,8 @@ typedef struct	s_options
 {
   bool		vs_ia;
   int		state;
+
+  bool		debug;
 }		t_options;
 
 typedef struct	s_rules

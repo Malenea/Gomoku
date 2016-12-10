@@ -153,15 +153,34 @@ void		print_options(t_game *curr, WINDOW *win)
       wattroff(win, COLOR_PAIR(curr->rules.w5 == true ? 1 : 2));
     }
   wprintw(win, "\n");
+  if (curr->options.state == 6)
+    {
+      wprintw(win, "%s ", TABS);
+      wattron(win, COLOR_PAIR(1));
+      wprintw(win, "Debug Mode:");
+      wattroff(win, COLOR_PAIR(1));
+      wprintw(win, "\t");
+      wattron(win, COLOR_PAIR(curr->options.debug == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->options.debug == true ? "Yes" : "No");
+      wattroff(win, COLOR_PAIR(curr->options.debug == true ? 1 : 2));
+    }
+  else
+    {
+      wprintw(win, "%s Debug Mode:\t", TABS);
+      wattron(win, COLOR_PAIR(curr->options.debug == true ? 1 : 2));
+      wprintw(win, "%s\n", curr->options.debug == true ? "Yes" : "No");
+      wattroff(win, COLOR_PAIR(curr->options.debug == true ? 1 : 2));
+    }
+  wprintw(win, "\n");
   if (curr->options.state == OPTIONS_NB)
     {
       wprintw(win, "%s", TABS);
       wattron(win, COLOR_PAIR(1));
-      wprintw(win, "Exit\n");
+      wprintw(win, "Return\n");
       wattroff(win, COLOR_PAIR(1));
     }
   else
-    wprintw(win, "%sExit\n", TABS);
+    wprintw(win, "%sReturn\n", TABS);
 }
 
 int		print_menu(t_game *curr, WINDOW *win)
@@ -262,8 +281,9 @@ void		print_infos(t_game *curr, WINDOW *win)
   wprintw(win, "Player %d's turn\n", (curr->player.state == true ? 1 : 2));
   wprintw(win, "Tokens left: %d\n", (curr->player.state == true ? curr->player.player1_tokens : curr->player.player2_tokens));
   wprintw(win, "Tokens own: %d\n", (curr->player.state == true ? curr->player.player1_capture : curr->player.player2_capture));
-  //wprintw(win, "Y : %d / X : %d", curr->cursy + 1, curr->cursx + 1);
-  wprintw(win, "IA_PRIO : %d", curr->goban[curr->cursy][curr->cursx].ia_prio);
+  wprintw(win, "Y : %d / X : %d\n", curr->cursy + 1, curr->cursx + 1);
+  if (curr->options.debug == true)
+    wprintw(win, "debug IA_PRIO : %d", curr->goban[curr->cursy][curr->cursx].ia_prio);
   wattroff(win, COLOR_PAIR(curr->player.state == true ? 3 : 4));
 }
 
@@ -294,6 +314,8 @@ void		prompt_options(t_game *curr, WINDOW *win)
 	    curr->rules.r3 = (curr->rules.r3 == true ? false : true);
 	  else if (curr->options.state == 5 && curr->rules.c2 == true)
 	    curr->rules.w5 = (curr->rules.w5 == true ? false : true);
+	  else if (curr->options.state == 6)
+	    curr->options.debug = (curr->options.debug == true ? false : true);
 	  else if (curr->options.state == OPTIONS_NB)
 	    {
 	      wclear(win);

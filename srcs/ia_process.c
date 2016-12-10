@@ -215,28 +215,40 @@ int		check_play_h(t_game *curr, int h, int l)
   int		res = 0;
   int		add_tokens;
   int		free_cases = 0;
+  int		ennemy_cases = 0;
   int		h_pos;
+  int		i;
 
+  add_tokens = curr->h;
   for (h_pos = h; h_pos < curr->h && curr->goban[h_pos][l].cont != PLAYER_SPOT; h_pos++)
-    free_cases += 1;
+    {
+      if (curr->goban[h_pos][l].cont == IA_SPOT)
+	res += add_tokens;
+      add_tokens -= 1;
+      free_cases += 1;
+    }
+  add_tokens = curr->h;
   for (h_pos = h; h_pos > 0 && curr->goban[h_pos][l].cont != PLAYER_SPOT; h_pos--)
-    free_cases += 1;
+    {
+      if (curr->goban[h_pos][l].cont == IA_SPOT)
+	res += add_tokens;
+      add_tokens -= 1;
+      free_cases += 1;
+    }
+  for (i = 0, h_pos = h; i < 3 && h_pos < curr->h; i++, h_pos++)
+    {
+      if (curr->goban[h_pos][l].cont == PLAYER_SPOT)
+	ennemy_cases += 1;
+    }
+  for (i = 0, h_pos = h; i < 3 && h_pos > 0; i++, h_pos--)
+    {
+      if (curr->goban[h_pos][l].cont == PLAYER_SPOT)
+	ennemy_cases += 1;
+    }
+  if (ennemy_cases >= 3)
+    return (res += curr->h * 40);
   if (free_cases < 5)
     return (-(curr->goban[h][l].ia_prio));
-  add_tokens = curr->h;
-  for (h_pos = h; h_pos < curr->h && curr->goban[h_pos][l].cont != PLAYER_SPOT; h_pos++)
-    {
-      if (curr->goban[h_pos][l].cont == IA_SPOT)
-	res += add_tokens;
-      add_tokens -= 1;
-    }
-  add_tokens = curr->h;
-  for (h_pos = h; h_pos > 0 && curr->goban[h_pos][l].cont != PLAYER_SPOT; h_pos--)
-    {
-      if (curr->goban[h_pos][l].cont == IA_SPOT)
-	res += add_tokens;
-      add_tokens -= 1;
-    }
   return (res);
 }
 
@@ -245,28 +257,40 @@ int		check_play_l(t_game *curr, int h, int l)
   int		res = 0;
   int		add_tokens;
   int		free_cases = 0;
+  int		ennemy_cases = 0;
   int		l_pos;
+  int		i;
 
+  add_tokens = curr->h;
   for (l_pos = l; l_pos < curr->l && curr->goban[h][l_pos].cont != PLAYER_SPOT; l_pos++)
-    free_cases += 1;
+    {
+      if (curr->goban[h][l_pos].cont == IA_SPOT)
+	res += add_tokens;
+      add_tokens -= 1;
+      free_cases += 1;
+    }
+  add_tokens = curr->h;
   for (l_pos = l; l_pos > 0 && curr->goban[h][l_pos].cont != PLAYER_SPOT; l_pos--)
-    free_cases += 1;
+    {
+      if (curr->goban[h][l_pos].cont == IA_SPOT)
+	res += add_tokens;
+      add_tokens -= 1;
+      free_cases += 1;
+    }
+  for (i = 0, l_pos = l; i < 3 && l_pos < curr->l; i++, l_pos++)
+    {
+      if (curr->goban[h][l_pos].cont == PLAYER_SPOT)
+	ennemy_cases += 1;
+    }
+  for (i = 0, l_pos = l; i < 3 && l_pos > 0; i++, l_pos--)
+    {
+      if (curr->goban[h][l_pos].cont == PLAYER_SPOT)
+	ennemy_cases += 1;
+    }
+  if (ennemy_cases >= 3)
+    return (res += curr->h * 40);
   if (free_cases < 5)
     return (-(curr->goban[h][l].ia_prio));
-  add_tokens = curr->h;
-  for (l_pos = l; l_pos < curr->l && curr->goban[h][l_pos].cont != PLAYER_SPOT; l_pos++)
-    {
-      if (curr->goban[h][l_pos].cont == IA_SPOT)
-	res += add_tokens;
-      add_tokens -= 1;
-    }
-  add_tokens = curr->h;
-  for (l_pos = l; l_pos > 0 && curr->goban[h][l_pos].cont != PLAYER_SPOT; l_pos--)
-    {
-      if (curr->goban[h][l_pos].cont == IA_SPOT)
-	res += add_tokens;
-      add_tokens -= 1;
-    }
   return (res);
 }
 
