@@ -528,14 +528,26 @@ int		count_d2(t_game *curr, int h, int l, bool state)
 
 int		count_tokens(t_game *curr)
 {
-  if (count_h(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
-    return (WIN_GAME);
-  if (count_l(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
-    return (WIN_GAME);
-  if (count_d1(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
-    return (WIN_GAME);
-  if (count_d2(curr, curr->cursy, curr->cursx, curr->player.state == true ? true : false) == 1)
-    return (WIN_GAME);
+  int		h;
+  int		l;
+
+  for (h = 0; h < curr->h; h++)
+    {
+      for (l = 0; l < curr->l; l++)
+	{
+	  if (curr->goban[h][l].cont != EMPTY_SPOT)
+	    {
+	      if (count_h(curr, h, l, curr->player.state == true ? true : false) == 1)
+		return (WIN_GAME);
+	      if (count_l(curr, h, l, curr->player.state == true ? true : false) == 1)
+		return (WIN_GAME);
+	      if (count_d1(curr, h, l, curr->player.state == true ? true : false) == 1)
+		return (WIN_GAME);
+	      if (count_d2(curr, h, l, curr->player.state == true ? true : false) == 1)
+		return (WIN_GAME);
+	    }
+	}
+    }
   return (0);
 }
 
